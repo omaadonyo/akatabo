@@ -103,7 +103,7 @@ class ReceiptTable
                             'items' => $record?->items ?? collect(),
                             'qrSvg' => QrCodeHelper::generateSvg($record->public_url),
                         ]))
-                        ->modalWidth('7xl'),
+                        ->modalWidth('3xl'),
                     DownloadPdfAction::make(),
                     Action::make('emailReceipt')
                         ->label('Email Receipt')

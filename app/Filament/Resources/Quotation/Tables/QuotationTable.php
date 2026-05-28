@@ -145,7 +145,7 @@ class QuotationTable
                             'company' => $record?->company,
                             'items' => $record?->items ?? collect(),
                         ]))
-                        ->modalWidth('7xl'),
+                        ->modalWidth('3xl'),
                     DeleteAction::make(),
                 ]),
             ])

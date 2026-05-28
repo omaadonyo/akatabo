@@ -5,7 +5,7 @@
     $invoice = $receipt->invoice;
 @endphp
 
-<div style="padding: 4px 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;">
+<div style="padding: 4px 0;>
     {{-- Header --}}
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 3px solid #f59e0b;">
         <div style="display: flex; align-items: center; gap: 14px;">
@@ -19,7 +19,7 @@
         </div>
         <div style="text-align: right;">
             <div style="font-size: 24px; font-weight: 800; color: #d97706; letter-spacing: -0.02em;">RECEIPT</div>
-            <div style="font-size: 12px; color: #6b7280; margin-top: 3px; font-family: 'Courier New', monospace; font-weight: 600;">{{ $receipt->number }}</div>
+            <div style="font-size: 12px; color: #6b7280; margin-top: 3px;">{{ $receipt->number }}</div>
             <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 8px;">
                 <span style="font-size: 11px; color: #6b7280;">{{ $receipt->date?->format('M d, Y') }}</span>
                 <span style="display: inline-block; padding: 2px 12px; font-size: 10px; font-weight: 700; border-radius: 20px; background: {{ $receipt->status === 'issued' ? '#ecfdf5' : '#f3f4f6' }}; color: {{ $receipt->status === 'issued' ? '#16a34a' : '#6b7280' }};">
@@ -118,7 +118,7 @@
         @endif
         @isset($qrSvg)
             <div style="flex-shrink: 0; text-align: center; padding: 16px; background: #fff; border: 1px solid #fde68a; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
-                {!! $qrSvg !!}
+                <img src="{!! $qrSvg !!}">
                 <div style="font-size: 9px; color: #9ca3af; margin-top: 6px;">Scan to view receipt online</div>
             </div>
         @endisset
