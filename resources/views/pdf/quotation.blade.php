@@ -109,9 +109,16 @@
     </table>
 </div>
 
-@if($quotation->notes)
+@if($quotation->company?->quotation_notes)
 <div class="notes">
     <h4>Notes</h4>
+    <p>{{ $quotation->company->quotation_notes }}</p>
+</div>
+@endif
+
+@if($quotation->notes)
+<div class="notes">
+    <h4>Document Notes</h4>
     <p>{{ $quotation->notes }}</p>
 </div>
 @endif

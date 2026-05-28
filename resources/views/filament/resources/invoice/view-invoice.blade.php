@@ -5,7 +5,7 @@
     $balance = $invoice->balance;
 @endphp
 
-<div style="padding: 4px 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;">
+<div style="padding: 4px 0; font-family: 'Inter', system-ui, -apple-system, sans-serif;">
     {{-- Header --}}
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 3px solid #f59e0b;">
         <div style="display: flex; align-items: center; gap: 14px;">
@@ -109,20 +109,26 @@
         </div>
     </div>
 
-    {{-- QR Code --}}
-    @isset($qrSvg)
-        <div style="text-align: center; margin: 24px 0;">
-            <div style="display: inline-block; padding: 16px; background: #fff; border: 1px solid #fde68a; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
+    {{-- Footer Notes + QR Code --}}
+    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 16px;">
+        @if($company?->invoice_notes)
+            <div style="flex: 1; padding: 14px 18px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;">
+                <div style="font-size: 9px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">Notes</div>
+                <div style="font-size: 12px; color: #6b7280; line-height: 1.6; white-space: pre-wrap;">{{ $company->invoice_notes }}</div>
+            </div>
+        @endif
+        @isset($qrSvg)
+            <div style="flex-shrink: 0; text-align: center; padding: 16px; background: #fff; border: 1px solid #fde68a; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
                 {!! $qrSvg !!}
                 <div style="font-size: 9px; color: #9ca3af; margin-top: 6px;">Scan to view invoice online</div>
             </div>
-        </div>
-    @endisset
+        @endisset
+    </div>
 
-    {{-- Notes --}}
+    {{-- Document Notes --}}
     @if($invoice->notes)
         <div style="padding: 14px 18px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 16px;">
-            <div style="font-size: 9px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">Notes</div>
+            <div style="font-size: 9px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">Document Notes</div>
             <div style="font-size: 12px; color: #6b7280; line-height: 1.6; white-space: pre-wrap;">{{ $invoice->notes }}</div>
         </div>
     @endif

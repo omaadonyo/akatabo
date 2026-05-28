@@ -120,17 +120,29 @@
     </table>
 </div>
 
+@if($invoice->company?->invoice_notes || isset($qrPath))
+<table style="width:100%; margin-top: 20px;"><tr>
+    @if($invoice->company?->invoice_notes)
+    <td style="width:60%; vertical-align:top; padding: 10px 15px; background: #f9fafb; border-radius:5px; font-size: 9pt; color: #555;">
+        <h4 style="margin: 0 0 5px 0; color: #d97706; font-size:9pt;">Notes</h4>
+        <p style="margin:0;">{{ $invoice->company->invoice_notes }}</p>
+    </td>
+    @endif
+    @isset($qrPath)
+    <td style="width:40%; text-align:center; vertical-align:top;">
+        <img src="{{ $qrPath }}" alt="QR Code" style="width: 90px; height: 90px;">
+        <p style="font-size:7pt; color:#9ca3af; margin:3px 0 0;">Scan to view invoice online</p>
+    </td>
+    @endisset
+</tr></table>
+@endif
+
 @if($invoice->notes)
 <div class="notes">
-    <h4>Notes</h4>
+    <h4>Document Notes</h4>
     <p>{{ $invoice->notes }}</p>
 </div>
 @endif
-
-<div class="qr-section">
-    <img src="{{ $qrPath }}" alt="QR Code" style="width: 100px; height: 100px;">
-    <p>Scan to view invoice online</p>
-</div>
 
 <div class="payment-info">
     <h4>Payment Information</h4>

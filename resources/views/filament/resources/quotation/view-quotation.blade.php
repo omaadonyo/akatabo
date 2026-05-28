@@ -92,10 +92,18 @@
         </div>
     </div>
 
-    {{-- Notes --}}
-    @if($quotation->notes)
+    {{-- Company Footer Notes --}}
+    @if($company?->quotation_notes)
         <div style="padding: 14px 18px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 16px;">
             <div style="font-size: 9px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">Notes</div>
+            <div style="font-size: 12px; color: #6b7280; line-height: 1.6; white-space: pre-wrap;">{{ $company->quotation_notes }}</div>
+        </div>
+    @endif
+
+    {{-- Document Notes --}}
+    @if($quotation->notes)
+        <div style="padding: 14px 18px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 16px;">
+            <div style="font-size: 9px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">Document Notes</div>
             <div style="font-size: 12px; color: #6b7280; line-height: 1.6; white-space: pre-wrap;">{{ $quotation->notes }}</div>
         </div>
     @endif
