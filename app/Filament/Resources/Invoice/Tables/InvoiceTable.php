@@ -43,10 +43,10 @@ class InvoiceTable
                     ->sortable()
                     ->toggleable(),
 
-                // TextColumn::make('company.name')
-                //     ->label('Company')
-                //     ->searchable()
-                //     ->sortable(),
+                TextColumn::make('company.name')
+                    ->label('Client')
+                    ->searchable()
+                    ->sortable(),
 
                 TextColumn::make('date')
                     ->label('Date')
