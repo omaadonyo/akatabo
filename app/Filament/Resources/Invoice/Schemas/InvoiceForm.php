@@ -33,18 +33,16 @@ class InvoiceForm
                 Hidden::make('subtotal'),
                 Hidden::make('tax_amount'),
                 Hidden::make('total'),
-                Hidden::make('paid_amount'),
+                Hidden::make('paid_amount')
+                    ->default(0),
 
                 Flex::make([
 
                     Group::make()
-                        ->columnSpan(12)
                         ->schema([
 
                             Section::make('Details')
                                 ->schema([
-
-                                    Grid::make(2)->schema([
 
                                         Select::make('customer_id')
                                             ->label('Customer')
@@ -88,23 +86,22 @@ class InvoiceForm
                                             ->default('draft')
                                             ->required(),
 
-                                    ]),
+                                  
 
                                 ]),
 
-                            Section::make('Items')
-                                ->schema([
+                            
 
                                     Repeater::make('items')
                                         ->relationship()
                                         ->schema([
-                                            Grid::make(12)->schema([
+                                            Grid::make(2)->schema([
 
                                                 Select::make('product_id')
                                                     ->label('Product')
                                                     ->searchable()
                                                     ->preload()
-                                                    ->columnSpan(5)
+                                                    ->columnSpan(7)
                                                     ->relationship('product', 'name')
                                                     ->reactive()
                                                     ->afterStateUpdated(function ($state, $set, $get) {
@@ -130,7 +127,7 @@ class InvoiceForm
                                                     ->numeric()
                                                     ->default(1)
                                                     ->reactive()
-                                                    ->columnSpan(3)
+                                                    ->columnSpan(5)
                                                     ->afterStateUpdated(function ($state, $set, $get) {
                                                         $qty = (float) ($state ?? 0);
                                                         $price = (float) ($get('unit_price') ?? 0);
@@ -139,7 +136,7 @@ class InvoiceForm
 
                                                 TextInput::make('unit')
                                                     ->label('Unit')
-                                                    ->columnSpan(2)
+                                                    ->columnSpan(5)
                                                     ->placeholder('m, pcs...'),
 
                                                 TextInput::make('unit_price')
@@ -148,7 +145,7 @@ class InvoiceForm
                                                     ->prefix('$')
                                                     ->default(0)
                                                     ->reactive()
-                                                    ->columnSpan(3)
+                                                    ->columnSpan(5)
                                                     ->afterStateUpdated(function ($state, $set, $get) {
                                                         $qty = (float) ($get('quantity') ?? 0);
                                                         $price = (float) ($state ?? 0);
@@ -160,7 +157,7 @@ class InvoiceForm
                                                     ->numeric()
                                                     ->prefix('$')
                                                     ->disabled()
-                                                    ->columnSpan(4),
+                                                    ->columnSpan(5),
 
                                             ]),
                                         ])
@@ -172,7 +169,7 @@ class InvoiceForm
                                         ->collapsible()
                                         ->defaultItems(1),
 
-                                ]),
+                                
 
                             Section::make('Pricing')
                                 ->schema([
@@ -217,11 +214,8 @@ class InvoiceForm
                         ]),
 
                     Group::make()
-                        ->columnSpan(12)
                         ->schema([
-
                             View::make('filament.forms.invoice-preview'),
-
                         ]),
 
                 ]),
