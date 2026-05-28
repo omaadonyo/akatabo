@@ -24,6 +24,8 @@ class CompanyResource extends Resource
 {
     protected static ?string $model = Company::class;
 
+    protected static bool $isScopedToTenant = false;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingLibrary;
 
     protected static string | UnitEnum | null $navigationGroup = 'Settings';
