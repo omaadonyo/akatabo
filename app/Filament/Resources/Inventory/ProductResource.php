@@ -61,7 +61,7 @@ class ProductResource extends Resource
         $name = $record->name;
 
         if ($record->image) {
-            $url = asset('storage/' . $record->image);
+            $url = '/storage/' . $record->image;
             return new HtmlString(
                 '<span style="display:inline-flex;align-items:center;gap:8px;">' .
                 '<img src="' . e($url) . '" style="width:22px;height:22px;border-radius:4px;object-fit:cover;flex-shrink:0;" alt="">' .
