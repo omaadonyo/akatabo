@@ -41,7 +41,7 @@ class AppPanelProvider extends PanelProvider
             ->tenantMenu()
             ->tenantRegistration(\App\Filament\Pages\RegisterCompany::class)
             ->tenantProfile(\App\Filament\Pages\CompanySettings::class)
-            ->topBar(false)
+            ->topBar(true)
             ->colors([
                 'primary' => Color::Amber,
             ])
