@@ -48,7 +48,7 @@ class InvoiceForm
 
                                         Select::make('customer_id')
                                             ->label('Customer')
-                                            ->options(fn () => Customer::where('company_id', auth()->user()?->currentTenant?->id)->pluck('name', 'id'))
+                                            ->relationship('customer', 'name', fn ($query) => $query->where('company_id', auth()->user()?->currentTenant?->id))
                                             ->searchable()
                                             ->preload()
                                             ->reactive()
