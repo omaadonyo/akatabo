@@ -1,6 +1,7 @@
 @php
     $invoice = $invoice ?? $this->record;
     $company = $company ?? $invoice->company;
+    $customer = $invoice->customer;
     $items = $items ?? $invoice->items;
     $balance = $invoice->balance;
 @endphp
@@ -33,8 +34,11 @@
     <div style="display: flex; gap: 14px; margin-bottom: 20px;">
         <div style="flex: 1; padding: 14px 18px;  border: 1px solid #fde68a; border-radius: 10px;">
             <div style="font-size: 9px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">Bill To</div>
-            <div style="font-size: 14px; font-weight: 600; ">{{ $company?->name ?? 'N/A' }}</div>
-            @if($company?->address || $company?->email)
+            <div style="font-size: 14px; font-weight: 600; ">{{ $customer?->name ?? $company?->name ?? 'N/A' }}</div>
+            @if($customer?->address || $customer?->email)
+                <div style="font-size: 12px;  margin-top: 3px;">{{ $customer?->address }}</div>
+                <div style="font-size: 12px; ">{{ $customer?->email }}</div>
+            @elseif($company?->address || $company?->email)
                 <div style="font-size: 12px;  margin-top: 3px;">{{ $company?->address }}</div>
                 <div style="font-size: 12px; ">{{ $company?->email }}</div>
             @endif

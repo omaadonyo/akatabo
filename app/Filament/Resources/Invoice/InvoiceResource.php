@@ -62,13 +62,13 @@ class InvoiceResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['number', 'company.name'];
+        return ['number', 'company.name', 'customer.name'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Client' => $record->company?->name ?? '—',
+            'Client' => $record->customer?->name ?? $record->company?->name ?? '—',
             'Date' => $record->date?->format('M d, Y') ?? '—',
             'Balance' => '$' . number_format($record->balance, 2),
         ];

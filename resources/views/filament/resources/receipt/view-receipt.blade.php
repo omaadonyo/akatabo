@@ -1,6 +1,7 @@
 @php
     $receipt = $receipt ?? $this->record;
     $company = $company ?? $receipt->company;
+    $customer = $receipt->customer;
     $items = $items ?? $receipt->items;
     $invoice = $receipt->invoice;
 @endphp
@@ -33,8 +34,11 @@
     <div style="display: flex; gap: 14px; margin-bottom: 20px;">
         <div style="flex: 1; padding: 14px 18px; background: linear-gradient(135deg, #fffbeb, #fff); border: 1px solid #fde68a; border-radius: 10px;">
             <div style="font-size: 9px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">Received From</div>
-            <div style="font-size: 14px; font-weight: 600; color: #1f2937;">{{ $company?->name ?? 'N/A' }}</div>
-            @if($company?->address || $company?->email)
+            <div style="font-size: 14px; font-weight: 600; color: #1f2937;">{{ $customer?->name ?? $company?->name ?? 'N/A' }}</div>
+            @if($customer?->address || $customer?->email)
+                <div style="font-size: 12px; color: #6b7280; margin-top: 3px;">{{ $customer?->address }}</div>
+                <div style="font-size: 12px; color: #6b7280;">{{ $customer?->email }}</div>
+            @elseif($company?->address || $company?->email)
                 <div style="font-size: 12px; color: #6b7280; margin-top: 3px;">{{ $company?->address }}</div>
                 <div style="font-size: 12px; color: #6b7280;">{{ $company?->email }}</div>
             @endif

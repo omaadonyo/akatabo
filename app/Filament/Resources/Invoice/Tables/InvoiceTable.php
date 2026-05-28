@@ -43,10 +43,11 @@ class InvoiceTable
                     ->sortable()
                     ->toggleable(),
 
-                // TextColumn::make('company.name')
-                //     ->label('Company')
-                //     ->searchable()
-                //     ->sortable(),
+                TextColumn::make('customer.name')
+                    ->label('Customer')
+                    ->searchable()
+                    ->sortable()
+                    ->default(fn ($record) => $record->company?->name),
 
                 TextColumn::make('date')
                     ->label('Date')
@@ -177,6 +178,7 @@ class InvoiceTable
                             $receipt = Receipt::create([
                                 'invoice_id' => $record->id,
                                 'company_id' => $record->company_id,
+                                'customer_id' => $record->customer_id,
                                 'user_id' => auth()->id(),
                                 'number' => 'RCT-' . date('Y') . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT),
                                 'date' => now(),
@@ -273,6 +275,7 @@ class InvoiceTable
                             $receipt = Receipt::create([
                                 'invoice_id' => $record->id,
                                 'company_id' => $record->company_id,
+                                'customer_id' => $record->customer_id,
                                 'user_id' => auth()->id(),
                                 'number' => 'RCT-' . date('Y') . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT),
                                 'date' => now(),
@@ -320,6 +323,7 @@ class InvoiceTable
                         ->modalContent(fn ($record) => view('filament.resources.invoice.view-invoice', [
                             'invoice' => $record,
                             'company' => $record?->company,
+                            'customer' => $record?->customer,
                             'items' => $record?->items ?? collect(),
                             'qrSvg' => QrCodeHelper::generateSvg($record->public_url),
                         ]))
@@ -333,7 +337,7 @@ class InvoiceTable
                         ->label('Export CSV')
                         ->columns([
                             'number' => 'Number',
-                            'company.name' => 'Company',
+                            'customer.name' => 'Customer',
                             'date' => 'Date',
                             'due_date' => 'Due Date',
                             'subtotal' => 'Subtotal',

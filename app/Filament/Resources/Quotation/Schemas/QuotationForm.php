@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Quotation\Schemas;
 
 use App\Models\Company;
+use App\Models\Customer;
 use App\Models\Product;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
@@ -25,6 +26,9 @@ class QuotationForm
 
                 Hidden::make('company_name'),
                 Hidden::make('company_address'),
+                Hidden::make('customer_name'),
+                Hidden::make('customer_address'),
+                Hidden::make('customer_email'),
                 Hidden::make('subtotal'),
                 Hidden::make('tax_amount'),
                 Hidden::make('total'),
@@ -53,6 +57,25 @@ class QuotationForm
                                                 if ($company) {
                                                     $set('company_name', $company->name);
                                                     $set('company_address', $company->address);
+                                                }
+                                                $set('customer_id', null);
+                                                $set('customer_name', '');
+                                                $set('customer_address', '');
+                                                $set('customer_email', '');
+                                            }),
+
+                                        Select::make('customer_id')
+                                            ->label('Customer')
+                                            ->options(fn ($get) => Customer::where('company_id', $get('company_id') ?? auth()->user()?->currentTenant?->id)->pluck('name', 'id'))
+                                            ->searchable()
+                                            ->preload()
+                                            ->reactive()
+                                            ->afterStateUpdated(function ($state, $set) {
+                                                $customer = Customer::find($state);
+                                                if ($customer) {
+                                                    $set('customer_name', $customer->name);
+                                                    $set('customer_address', $customer->address);
+                                                    $set('customer_email', $customer->email);
                                                 }
                                             }),
 

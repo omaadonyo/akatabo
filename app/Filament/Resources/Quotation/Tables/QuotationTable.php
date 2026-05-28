@@ -31,10 +31,11 @@ class QuotationTable
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('company.name')
-                    ->label('Company')
+                TextColumn::make('customer.name')
+                    ->label('Customer')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->default(fn ($record) => $record->company?->name),
 
                 TextColumn::make('date')
                     ->label('Date')
@@ -109,6 +110,7 @@ class QuotationTable
                             $invoice = Invoice::create([
                                 'quotation_id' => $record->id,
                                 'company_id' => $record->company_id,
+                                'customer_id' => $record->customer_id,
                                 'user_id' => auth()->id(),
                                 'number' => 'INV-' . date('Y') . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT),
                                 'date' => now(),
@@ -144,6 +146,7 @@ class QuotationTable
                         ->modalContent(fn ($record) => view('filament.resources.quotation.view-quotation', [
                             'quotation' => $record,
                             'company' => $record?->company,
+                            'customer' => $record?->customer,
                             'items' => $record?->items ?? collect(),
                             'qrSvg' => QrCodeHelper::generateSvg($record->public_url),
                         ]))

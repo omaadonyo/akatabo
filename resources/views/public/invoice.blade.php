@@ -39,10 +39,13 @@
             </div>
             <div>
                 <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Bill To</h3>
-                @if($invoice->company)
+                @if($invoice->customer)
+                <p class="text-gray-800 font-semibold">{{ $invoice->customer->name }}</p>
+                @if($invoice->customer->address)<p class="text-gray-600 text-sm">{{ $invoice->customer->address }}</p>@endif
+                @if($invoice->customer->email)<p class="text-gray-600 text-sm">{{ $invoice->customer->email }}</p>@endif
+                @elseif($invoice->company)
                 <p class="text-gray-800 font-semibold">{{ $invoice->company->name }}</p>
                 @if($invoice->company->address)<p class="text-gray-600 text-sm">{{ $invoice->company->address }}</p>@endif
-                @if($invoice->company->email)<p class="text-gray-600 text-sm">{{ $invoice->company->email }}</p>@endif
                 @endif
             </div>
         </div>

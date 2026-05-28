@@ -39,7 +39,7 @@ class ReceiptMail extends Mailable
 
     public function attachments(): array
     {
-        $this->receipt->load(['items', 'company']);
+        $this->receipt->load(['items', 'company', 'customer']);
         $qrPath = QrCodeHelper::generatePngFile($this->receipt->public_url);
 
         $pdf = Pdf::loadView('pdf.receipt', [

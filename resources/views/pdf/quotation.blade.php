@@ -61,7 +61,11 @@
     </div>
     <div class="client-box">
         <h3>Prepared For</h3>
-        @if($quotation->company)
+        @if($quotation->customer)
+            <p><strong>{{ $quotation->customer->name }}</strong></p>
+            @if($quotation->customer->address)<p>{{ $quotation->customer->address }}</p>@endif
+            @if($quotation->customer->email)<p>{{ $quotation->customer->email }}</p>@endif
+        @elseif($quotation->company)
             <p><strong>{{ $quotation->company->name }}</strong></p>
             @if($quotation->company->address)<p>{{ $quotation->company->address }}</p>@endif
         @endif

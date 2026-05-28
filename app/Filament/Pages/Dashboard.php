@@ -267,7 +267,7 @@ class RecentInvoicesTable extends TableWidget
     {
         return [
             \Filament\Tables\Columns\TextColumn::make('number'),
-            \Filament\Tables\Columns\TextColumn::make('company.name'),
+            \Filament\Tables\Columns\TextColumn::make('customer.name'),
             \Filament\Tables\Columns\TextColumn::make('total')->money('USD'),
             \Filament\Tables\Columns\TextColumn::make('status')->badge()
                 ->color(fn (string $state): string => match ($state) {

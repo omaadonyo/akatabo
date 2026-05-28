@@ -27,7 +27,7 @@ class QuotationCreatedNotification extends Notification
     {
         return [
             'title' => 'Quotation Created',
-            'body' => 'Quotation ' . $this->quotation->number . ' for ' . ($this->quotation->company->name ?? 'N/A') . ' has been created.',
+            'body' => 'Quotation ' . $this->quotation->number . ' for ' . ($this->quotation->customer?->name ?? $this->quotation->company?->name ?? 'N/A') . ' has been created.',
             'url' => QuotationResource::getUrl('edit', ['record' => $this->quotation]),
             'icon' => 'heroicon-o-document-text',
             'document_number' => $this->quotation->number,

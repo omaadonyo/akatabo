@@ -39,7 +39,7 @@ class InvoiceBalanceMail extends Mailable
 
     public function attachments(): array
     {
-        $this->invoice->load(['items', 'company']);
+        $this->invoice->load(['items', 'company', 'customer']);
         $qrPath = QrCodeHelper::generatePngFile($this->invoice->public_url);
         $pdf = Pdf::loadView('pdf.invoice', [
             'invoice' => $this->invoice,

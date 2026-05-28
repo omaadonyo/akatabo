@@ -39,7 +39,7 @@ class QuotationMail extends Mailable
 
     public function attachments(): array
     {
-        $this->quotation->load(['items', 'company']);
+        $this->quotation->load(['items', 'company', 'customer']);
         $qrPath = QrCodeHelper::generatePngFile($this->quotation->public_url);
 
         $pdf = Pdf::loadView('pdf.quotation', [

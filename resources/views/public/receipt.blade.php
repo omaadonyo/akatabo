@@ -41,7 +41,11 @@
             </div>
             <div>
                 <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Received From</h3>
-                @if($receipt->company)
+                @if($receipt->customer)
+                <p class="text-gray-800 font-semibold">{{ $receipt->customer->name }}</p>
+                @if($receipt->customer->address)<p class="text-gray-600 text-sm">{{ $receipt->customer->address }}</p>@endif
+                @if($receipt->customer->email)<p class="text-gray-600 text-sm">{{ $receipt->customer->email }}</p>@endif
+                @elseif($receipt->company)
                 <p class="text-gray-800 font-semibold">{{ $receipt->company->name }}</p>
                 @if($receipt->company->address)<p class="text-gray-600 text-sm">{{ $receipt->company->address }}</p>@endif
                 @endif

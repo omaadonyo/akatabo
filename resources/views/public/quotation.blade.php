@@ -40,10 +40,13 @@
             </div>
             <div>
                 <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Prepared For</h3>
-                @if($quotation->company)
+                @if($quotation->customer)
+                <p class="text-gray-800 font-semibold">{{ $quotation->customer->name }}</p>
+                @if($quotation->customer->address)<p class="text-gray-600 text-sm">{{ $quotation->customer->address }}</p>@endif
+                @if($quotation->customer->email)<p class="text-gray-600 text-sm">{{ $quotation->customer->email }}</p>@endif
+                @elseif($quotation->company)
                 <p class="text-gray-800 font-semibold">{{ $quotation->company->name }}</p>
                 @if($quotation->company->address)<p class="text-gray-600 text-sm">{{ $quotation->company->address }}</p>@endif
-                @if($quotation->company->email)<p class="text-gray-600 text-sm">{{ $quotation->company->email }}</p>@endif
                 @endif
             </div>
         </div>

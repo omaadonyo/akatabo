@@ -83,8 +83,48 @@
                 --default-theme-mode: {{ filament()->getDefaultThemeMode()->value }};
             }
 
+
             html.fi {
                 --livewire-progress-bar-color: var(--primary-500);
+            }
+
+            .fi-body {
+                background-color: #e8e8e8;
+            }
+
+            .fi-body:where(.dark,.dark *) {
+                background-color: var(--gray-950);
+                color: var(--color-white);
+            }
+
+            @media (min-width: 64rem) {
+                .fi-sidebar.fi-sidebar-open {
+                    --tw-shadow: 0 0 #0000;
+                    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+                    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+                    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+                    background: #00000012;
+                }
+            }
+
+            /* width */
+            ::-webkit-scrollbar {
+            width: 8px;height:4px;
+            }
+
+            /* Track */
+            ::-webkit-scrollbar-track {
+            background: #f1f1f100; 
+            }
+            
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+            background: #888; border-radius:30px;
+            }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
             }
         </style>
 

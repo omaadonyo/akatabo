@@ -2,6 +2,8 @@
     x-data="{
         company_name: '',
         company_address: '',
+        customer_name: '',
+        customer_address: '',
         number: '',
         date: '',
         status: '',
@@ -36,6 +38,8 @@
                 if (data) {
                     this.company_name = data.company_name || '';
                     this.company_address = data.company_address || '';
+                    this.customer_name = data.customer_name || '';
+                    this.customer_address = data.customer_address || '';
                     this.number = data.number || '';
                     this.date = data.date || '';
                     this.status = data.status || '';
@@ -99,8 +103,8 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-top: 16px; border-top: 1px solid #f3f4f6;">
                 <div>
                     <div style="font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Bill To</div>
-                    <div style="font-size: 13px; font-weight: 600; color: #111827;" x-text="company_name"></div>
-                    <div style="font-size: 11px; color: #6b7280;" x-text="company_address"></div>
+                    <div style="font-size: 13px; font-weight: 600; color: #111827;" x-text="customer_name || company_name"></div>
+                    <div style="font-size: 11px; color: #6b7280;" x-text="customer_address || company_address"></div>
                 </div>
                 <div style="text-align: right;">
                     <div style="font-size: 11px; color: #6b7280;">

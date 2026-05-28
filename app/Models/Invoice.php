@@ -12,6 +12,7 @@ class Invoice extends Model
     protected $fillable = [
         'quotation_id',
         'company_id',
+        'customer_id',
         'user_id',
         'number',
         'date',
@@ -84,6 +85,11 @@ class Invoice extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
     }
 
     public function user()

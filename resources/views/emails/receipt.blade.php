@@ -24,7 +24,7 @@
         </div>
 
         <div class="details">
-            <p><strong>{{ $receipt->company->name ?? '' }}</strong></p>
+            <p><strong>{{ $receipt->customer->name ?? $receipt->company->name ?? '' }}</strong></p>
             <p>Receipt: {{ $receipt->number }}</p>
             @if($receipt->invoice)
             <p>Invoice: {{ $receipt->invoice->number }}</p>

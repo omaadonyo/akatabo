@@ -25,7 +25,7 @@
         </div>
 
         <div class="details">
-            <p><strong>{{ $invoice->company->name }}</strong></p>
+            <p><strong>{{ $invoice->customer->name ?? $invoice->company->name }}</strong></p>
             <p>Date: {{ $invoice->date->format('F j, Y') }}</p>
             <p>Due Date: {{ $invoice->due_date->format('F j, Y') }}</p>
             <p>Status: {{ ucfirst($invoice->status) }}</p>

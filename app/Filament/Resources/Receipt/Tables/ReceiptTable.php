@@ -38,10 +38,11 @@ class ReceiptTable
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('company.name')
-                    ->label('Company')
+                TextColumn::make('customer.name')
+                    ->label('Customer')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->default(fn ($record) => $record->company?->name),
 
                 TextColumn::make('date')
                     ->label('Date')
@@ -100,6 +101,7 @@ class ReceiptTable
                         ->modalContent(fn ($record) => view('filament.resources.receipt.view-receipt', [
                             'receipt' => $record,
                             'company' => $record?->company,
+                            'customer' => $record?->customer,
                             'items' => $record?->items ?? collect(),
                             'qrSvg' => QrCodeHelper::generateSvg($record->public_url),
                         ]))
@@ -139,7 +141,7 @@ class ReceiptTable
                         ->columns([
                             'number' => 'Number',
                             'invoice.number' => 'From Invoice',
-                            'company.name' => 'Company',
+                            'customer.name' => 'Customer',
                             'date' => 'Date',
                             'subtotal' => 'Subtotal',
                             'tax_amount' => 'Tax',

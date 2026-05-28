@@ -23,7 +23,7 @@
 <tr>
     <th>Number</th>
     <th>Invoice</th>
-    <th>Company</th>
+    <th>Customer</th>
     <th>Date</th>
     <th class="amount">Total</th>
     <th>Status</th>
@@ -34,7 +34,7 @@
 <tr>
     <td>{{ $receipt->number }}</td>
     <td>{{ $receipt->invoice?->number ?? '—' }}</td>
-    <td>{{ $receipt->company?->name ?? '—' }}</td>
+    <td>{{ $receipt->customer?->name ?? $receipt->company?->name ?? '—' }}</td>
     <td>{{ $receipt->date?->format('Y-m-d') ?? '—' }}</td>
     <td class="amount">${{ number_format($receipt->total, 2) }}</td>
     <td>{{ ucfirst($receipt->status) }}</td>

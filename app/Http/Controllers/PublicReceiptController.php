@@ -9,7 +9,7 @@ class PublicReceiptController extends Controller
 {
     public function show($id)
     {
-        $receipt = Receipt::with(['items', 'company'])->findOrFail($id);
+        $receipt = Receipt::with(['items', 'company', 'customer'])->findOrFail($id);
         return view('public.receipt', compact('receipt'));
     }
 }

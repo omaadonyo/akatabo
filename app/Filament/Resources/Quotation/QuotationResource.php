@@ -64,13 +64,13 @@ class QuotationResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['number', 'company.name'];
+        return ['number', 'company.name', 'customer.name'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Client' => $record->company?->name ?? '—',
+            'Client' => $record->customer?->name ?? $record->company?->name ?? '—',
             'Date' => $record->date?->format('M d, Y') ?? '—',
             'Total' => '$' . number_format($record->total, 2),
         ];

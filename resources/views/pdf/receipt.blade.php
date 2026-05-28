@@ -62,7 +62,11 @@
     </div>
     <div class="client-box">
         <h3>Received From</h3>
-        @if($receipt->company)
+        @if($receipt->customer)
+            <p><strong>{{ $receipt->customer->name }}</strong></p>
+            @if($receipt->customer->address)<p>{{ $receipt->customer->address }}</p>@endif
+            @if($receipt->customer->email)<p>{{ $receipt->customer->email }}</p>@endif
+        @elseif($receipt->company)
             <p><strong>{{ $receipt->company->name }}</strong></p>
             @if($receipt->company->address)<p>{{ $receipt->company->address }}</p>@endif
         @endif

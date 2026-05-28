@@ -27,7 +27,7 @@
         <p>Your quotation has been accepted.</p>
 
         <div class="details">
-            <p><strong>{{ $quotation->company->name ?? '' }}</strong></p>
+            <p><strong>{{ $quotation->customer->name ?? $quotation->company->name ?? '' }}</strong></p>
             <p>Quotation: {{ $quotation->number }}</p>
             <p>Date: {{ $quotation->date->format('F j, Y') }}</p>
             <p>Status: {{ ucfirst($quotation->status) }}</p>

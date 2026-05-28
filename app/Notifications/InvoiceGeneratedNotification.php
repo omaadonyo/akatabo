@@ -27,7 +27,7 @@ class InvoiceGeneratedNotification extends Notification
     {
         return [
             'title' => 'Invoice Generated',
-            'body' => 'Invoice ' . $this->invoice->number . ' for ' . ($this->invoice->company->name ?? 'N/A') . ' has been generated.',
+            'body' => 'Invoice ' . $this->invoice->number . ' for ' . ($this->invoice->customer?->name ?? $this->invoice->company?->name ?? 'N/A') . ' has been generated.',
             'url' => InvoiceResource::getUrl('edit', ['record' => $this->invoice]),
             'icon' => 'heroicon-o-currency-dollar',
             'document_number' => $this->invoice->number,

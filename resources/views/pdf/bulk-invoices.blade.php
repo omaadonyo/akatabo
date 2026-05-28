@@ -23,7 +23,7 @@
 <thead>
 <tr>
     <th>Number</th>
-    <th>Company</th>
+    <th>Customer</th>
     <th>Date</th>
     <th>Due Date</th>
     <th class="amount">Total</th>
@@ -35,7 +35,7 @@
 @foreach($records as $invoice)
 <tr>
     <td>{{ $invoice->number }}</td>
-    <td>{{ $invoice->company?->name ?? '—' }}</td>
+    <td>{{ $invoice->customer?->name ?? $invoice->company?->name ?? '—' }}</td>
     <td>{{ $invoice->date?->format('Y-m-d') ?? '—' }}</td>
     <td>{{ $invoice->due_date?->format('Y-m-d') ?? '—' }}</td>
     <td class="amount">${{ number_format($invoice->total, 2) }}</td>

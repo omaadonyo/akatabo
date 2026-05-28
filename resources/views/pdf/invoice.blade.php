@@ -63,10 +63,13 @@
     </div>
     <div class="client-box">
         <h3>Bill To</h3>
-        @if($invoice->company)
+        @if($invoice->customer)
+            <p><strong>{{ $invoice->customer->name }}</strong></p>
+            @if($invoice->customer->address)<p>{{ $invoice->customer->address }}</p>@endif
+            @if($invoice->customer->email)<p>{{ $invoice->customer->email }}</p>@endif
+        @elseif($invoice->company)
             <p><strong>{{ $invoice->company->name }}</strong></p>
             @if($invoice->company->address)<p>{{ $invoice->company->address }}</p>@endif
-            @if($invoice->company->email)<p>{{ $invoice->company->email }}</p>@endif
         @endif
     </div>
 </div>

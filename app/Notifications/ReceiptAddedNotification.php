@@ -27,7 +27,7 @@ class ReceiptAddedNotification extends Notification
     {
         return [
             'title' => 'Receipt Added',
-            'body' => 'Receipt ' . $this->receipt->number . ' for ' . ($this->receipt->company->name ?? 'N/A') . ' has been added.',
+            'body' => 'Receipt ' . $this->receipt->number . ' for ' . ($this->receipt->customer?->name ?? $this->receipt->company?->name ?? 'N/A') . ' has been added.',
             'url' => ReceiptResource::getUrl('edit', ['record' => $this->receipt]),
             'icon' => 'heroicon-o-receipt-percent',
             'document_number' => $this->receipt->number,

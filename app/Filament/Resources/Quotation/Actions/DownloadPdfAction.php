@@ -16,7 +16,7 @@ class DownloadPdfAction extends Action
             ->icon('heroicon-o-document-arrow-down')
             ->color('gray')
             ->action(function (Quotation $record) {
-                $record->load(['items', 'company']);
+                $record->load(['items', 'company', 'customer']);
                 $qrPath = QrCodeHelper::generatePngFile($record->public_url);
                 $pdf = Pdf::loadView('pdf.quotation', [
                     'quotation' => $record,

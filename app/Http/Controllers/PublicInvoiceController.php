@@ -9,7 +9,7 @@ class PublicInvoiceController extends Controller
 {
     public function show($id)
     {
-        $invoice = Invoice::with(['items', 'company'])->findOrFail($id);
+        $invoice = Invoice::with(['items', 'company', 'customer'])->findOrFail($id);
         abort_if($invoice->status === 'cancelled', 404);
         return view('public.invoice', compact('invoice'));
     }
