@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Filament\Resources\Invoice\InvoiceResource;
 use App\Models\Invoice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -27,7 +28,7 @@ class InvoiceGeneratedNotification extends Notification
         return [
             'title' => 'Invoice Generated',
             'body' => 'Invoice ' . $this->invoice->number . ' for ' . ($this->invoice->company->name ?? 'N/A') . ' has been generated.',
-            'url' => route('filament.app.resources.invoice.invoices.edit', $this->invoice->id),
+            'url' => InvoiceResource::getUrl('edit', ['record' => $this->invoice]),
             'icon' => 'heroicon-o-currency-dollar',
             'document_number' => $this->invoice->number,
             'total' => $this->invoice->total,
