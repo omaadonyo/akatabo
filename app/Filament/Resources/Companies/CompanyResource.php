@@ -11,6 +11,7 @@ use App\Filament\Resources\Companies\Schemas\CompanyForm;
 use App\Filament\Resources\Companies\Tables\CompaniesTable;
 use App\Models\Company;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -54,6 +55,18 @@ class CompanyResource extends Resource
             'create' => CreateCompany::route('/create'),
             'edit' => EditCompany::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+
+        if ($user) {
+            return parent::getEloquentQuery()
+                ->whereIn('id', $user->companies()->pluck('company_id'));
+        }
+
+        return parent::getEloquentQuery();
     }
 
     public static function getRecordRouteBindingEloquentQuery(): Builder

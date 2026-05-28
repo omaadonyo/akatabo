@@ -8,15 +8,25 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class ProductStatsOverview extends StatsOverviewWidget
 {
+    protected function tenantId(): ?int
+    {
+        return auth()->user()?->currentTenant?->id;
+    }
+
     protected function getCards(): array
     {
-        $totalProducts = Product::where('type', 'product')->count();
-        $totalServices = Product::where('type', 'service')->count();
-        $lowStockCount = Product::all()->filter->isLowStock()->count();
-        $activeCount = Product::where('is_active', true)->count();
-        $inactiveCount = Product::where('is_active', false)->count();
+        $tenantId = $this->tenantId();
 
-        $productValue = Product::where('type', 'product')
+        $baseQuery = Product::query()->when($tenantId, fn ($q) => $q->where('company_id', $tenantId));
+
+        $totalProducts = (clone $baseQuery)->where('type', 'product')->count();
+        $totalServices = (clone $baseQuery)->where('type', 'service')->count();
+        $allProducts = (clone $baseQuery)->get();
+        $lowStockCount = $allProducts->filter->isLowStock()->count();
+        $activeCount = (clone $baseQuery)->where('is_active', true)->count();
+        $inactiveCount = (clone $baseQuery)->where('is_active', false)->count();
+
+        $productValue = (clone $baseQuery)->where('type', 'product')
             ->get()
             ->sum(fn ($p) => ($p->stock_quantity ?? 0) * ($p->unit_price ?? 0));
 

@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
+use App\Models\Company;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -36,6 +37,10 @@ class AppPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->databaseNotifications()
             // ->topNavigation()
+            ->tenant(Company::class)
+            ->tenantMenu()
+            ->tenantRegistration(\App\Filament\Pages\RegisterCompany::class)
+            ->tenantProfile(\App\Filament\Pages\CompanySettings::class)
             ->topBar(false)
             ->colors([
                 'primary' => Color::Amber,

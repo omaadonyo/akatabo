@@ -16,6 +16,12 @@ class CreateCompany extends CreateRecord
         return $data;
     }
 
+    protected function afterCreate(): void
+    {
+        $company = $this->getRecord();
+        $company->users()->syncWithoutDetaching(auth()->id());
+    }
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

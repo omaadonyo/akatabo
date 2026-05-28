@@ -11,7 +11,7 @@ class CreateProduct extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['user_id'] = auth()->id();
+        $data['company_id'] = auth()->user()->currentTenant?->id;
 
         if (empty($data['sku'])) {
             $data['sku'] = 'SKU-' . strtoupper(substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 8));

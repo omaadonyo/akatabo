@@ -39,17 +39,28 @@ class Dashboard extends BaseDashboard
 
 class DashboardStatsOverview extends StatsOverviewWidget
 {
+    protected function tenantId(): ?int
+    {
+        return auth()->user()?->currentTenant?->id;
+    }
+
     protected function getCards(): array
     {
-        $totalInvoiced = Invoice::whereNotIn('status', ['draft', 'cancelled'])->sum('total');
-        $totalPaid = Invoice::sum('paid_amount');
+        $tenantId = $this->tenantId();
+
+        $invoiceQuery = Invoice::query()->when($tenantId, fn ($q) => $q->where('company_id', $tenantId));
+        $quotationQuery = Quotation::query()->when($tenantId, fn ($q) => $q->where('company_id', $tenantId));
+        $productQuery = Product::query()->when($tenantId, fn ($q) => $q->where('company_id', $tenantId));
+
+        $totalInvoiced = (clone $invoiceQuery)->whereNotIn('status', ['draft', 'cancelled'])->sum('total');
+        $totalPaid = (clone $invoiceQuery)->sum('paid_amount');
         $outstanding = $totalInvoiced - $totalPaid;
-        $invoiceCount = Invoice::whereNotIn('status', ['cancelled'])->count();
-        $quotationCount = Quotation::whereNotIn('status', ['draft', 'cancelled'])->count();
-        $productCount = Product::where('type', 'product')->count();
-        $lowStockCount = Product::all()->filter->isLowStock()->count();
-        $companyCount = Company::count();
-        $activeCompanyCount = Company::where('active', true)->count();
+        $invoiceCount = (clone $invoiceQuery)->whereNotIn('status', ['cancelled'])->count();
+        $quotationCount = (clone $quotationQuery)->whereNotIn('status', ['draft', 'cancelled'])->count();
+        $productCount = (clone $productQuery)->where('type', 'product')->count();
+        $allProducts = (clone $productQuery)->get();
+        $lowStockCount = $allProducts->filter->isLowStock()->count();
+        $companyCount = Company::when($tenantId, fn ($q) => $q->where('id', $tenantId))->count();
 
         return [
             Stat::make('Invoices', $invoiceCount)
@@ -61,11 +72,11 @@ class DashboardStatsOverview extends StatsOverviewWidget
                 ->icon('heroicon-o-currency-dollar')
                 ->color($outstanding > 0 ? 'warning' : 'success'),
             Stat::make('Companies', $companyCount)
-                ->description($activeCompanyCount . ' active')
+                ->description('Selected company')
                 ->icon('heroicon-o-building-library')
                 ->color('primary'),
             Stat::make('Quotations', $quotationCount)
-                ->description(Quotation::where('status', 'accepted')->count() . ' accepted')
+                ->description((clone $quotationQuery)->where('status', 'accepted')->count() . ' accepted')
                 ->icon('heroicon-o-document-text')
                 ->color('info'),
             Stat::make('Products', $productCount)
@@ -81,10 +92,16 @@ class RevenueChart extends ChartWidget
     protected ?string $heading = 'Revenue (Last 12 Months)';
     protected static ?int $sort = 1;
 
+    protected function tenantId(): ?int
+    {
+        return auth()->user()?->currentTenant?->id;
+    }
+
     protected function getData(): array
     {
         $data = [];
         $labels = [];
+        $tenantId = $this->tenantId();
 
         for ($i = 11; $i >= 0; $i--) {
             $month = now()->subMonths($i);
@@ -92,6 +109,7 @@ class RevenueChart extends ChartWidget
             $data[] = (float) Invoice::whereMonth('date', $month->month)
                 ->whereYear('date', $month->year)
                 ->whereNotIn('status', ['draft', 'cancelled'])
+                ->when($tenantId, fn ($q) => $q->where('company_id', $tenantId))
                 ->sum('total');
         }
 
@@ -119,9 +137,17 @@ class InvoiceStatusChart extends ChartWidget
     protected ?string $heading = 'Invoice Status';
     protected static ?int $sort = 2;
 
+    protected function tenantId(): ?int
+    {
+        return auth()->user()?->currentTenant?->id;
+    }
+
     protected function getData(): array
     {
+        $tenantId = $this->tenantId();
+
         $statuses = Invoice::selectRaw("status, count(*) as count")
+            ->when($tenantId, fn ($q) => $q->where('company_id', $tenantId))
             ->groupBy('status')
             ->pluck('count', 'status');
 
@@ -158,8 +184,14 @@ class MonthlyTrendChart extends ChartWidget
     protected ?string $heading = 'Revenue Comparison';
     protected static ?int $sort = 3;
 
+    protected function tenantId(): ?int
+    {
+        return auth()->user()?->currentTenant?->id;
+    }
+
     protected function getData(): array
     {
+        $tenantId = $this->tenantId();
         $currentYear = now()->year;
         $previousYear = $currentYear - 1;
         $labels = [];
@@ -173,11 +205,13 @@ class MonthlyTrendChart extends ChartWidget
             $currentData[] = (float) Invoice::whereMonth('date', $month)
                 ->whereYear('date', $currentYear)
                 ->whereNotIn('status', ['draft', 'cancelled'])
+                ->when($tenantId, fn ($q) => $q->where('company_id', $tenantId))
                 ->sum('total');
 
             $previousData[] = (float) Invoice::whereMonth('date', $month)
                 ->whereYear('date', $previousYear)
                 ->whereNotIn('status', ['draft', 'cancelled'])
+                ->when($tenantId, fn ($q) => $q->where('company_id', $tenantId))
                 ->sum('total');
         }
 
@@ -220,7 +254,13 @@ class RecentInvoicesTable extends TableWidget
 
     protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return Invoice::query()->with('company')->latest()->limit(5);
+        $tenantId = auth()->user()?->currentTenant?->id;
+
+        return Invoice::query()
+            ->with('company')
+            ->when($tenantId, fn ($q) => $q->where('company_id', $tenantId))
+            ->latest()
+            ->limit(5);
     }
 
     protected function getTableColumns(): array
@@ -246,10 +286,13 @@ class LowStockTable extends TableWidget
 
     protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
     {
+        $tenantId = auth()->user()?->currentTenant?->id;
+
         return Product::query()
             ->where('type', 'product')
             ->whereColumn('stock_quantity', '<=', 'low_stock_threshold')
             ->whereNotNull('low_stock_threshold')
+            ->when($tenantId, fn ($q) => $q->where('company_id', $tenantId))
             ->latest();
     }
 

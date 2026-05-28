@@ -11,7 +11,7 @@ class Product extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id',
+        'company_id',
         'name',
         'sku',
         'type',
@@ -40,9 +40,9 @@ class Product extends Model
         return $this->image ? Storage::url($this->image) : null;
     }
 
-    public function user()
+    public function company()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Company::class);
     }
 
     public function isService(): bool

@@ -41,11 +41,12 @@ class ReceiptForm
 
                                         Select::make('company_id')
                                             ->label('Company')
-                                            ->relationship('company', 'name')
+                                            ->options(fn () => auth()->user()?->companies()->pluck('name', 'id') ?? [])
                                             ->searchable()
                                             ->preload()
                                             ->required()
                                             ->reactive()
+                                            ->default(fn () => auth()->user()?->currentTenant?->id)
                                             ->afterStateUpdated(function ($state, $set) {
                                                 $company = Company::find($state);
                                                 if ($company) {
