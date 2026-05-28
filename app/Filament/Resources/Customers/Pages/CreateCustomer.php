@@ -11,7 +11,7 @@ class CreateCustomer extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['company_id'] = auth()->user()?->currentTenant?->id;
+        $data['company_id'] = filament()->getTenant()?->id;
 
         return $data;
     }

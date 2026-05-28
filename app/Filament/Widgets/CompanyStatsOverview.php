@@ -11,7 +11,7 @@ class CompanyStatsOverview extends StatsOverviewWidget
 {
     protected function tenantId(): ?int
     {
-        return auth()->user()?->currentTenant?->id;
+        return filament()->getTenant()?->id;
     }
 
     protected function getCards(): array

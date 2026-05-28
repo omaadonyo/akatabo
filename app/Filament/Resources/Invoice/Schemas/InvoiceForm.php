@@ -24,9 +24,9 @@ class InvoiceForm
             ->components([
 
                 Hidden::make('company_name')
-                    ->default(fn () => auth()->user()?->currentTenant?->name),
+                    ->default(fn () => filament()->getTenant()?->name),
                 Hidden::make('company_address')
-                    ->default(fn () => auth()->user()?->currentTenant?->address),
+                    ->default(fn () => filament()->getTenant()?->address),
                 Hidden::make('customer_name'),
                 Hidden::make('customer_address'),
                 Hidden::make('customer_email'),
@@ -48,7 +48,7 @@ class InvoiceForm
 
                                         Select::make('customer_id')
                                             ->label('Customer')
-                                            ->relationship('customer', 'name', fn ($query) => $query->where('company_id', auth()->user()?->currentTenant?->id))
+                                            ->relationship('customer', 'name', fn ($query) => $query->where('company_id', filament()->getTenant()?->id))
                                             ->searchable()
                                             ->preload()
                                             ->reactive()

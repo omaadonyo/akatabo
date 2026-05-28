@@ -41,7 +41,7 @@ class DashboardStatsOverview extends StatsOverviewWidget
 {
     protected function tenantId(): ?int
     {
-        return auth()->user()?->currentTenant?->id;
+        return filament()->getTenant()?->id;
     }
 
     protected function getCards(): array
@@ -94,7 +94,7 @@ class RevenueChart extends ChartWidget
 
     protected function tenantId(): ?int
     {
-        return auth()->user()?->currentTenant?->id;
+        return filament()->getTenant()?->id;
     }
 
     protected function getData(): array
@@ -139,7 +139,7 @@ class InvoiceStatusChart extends ChartWidget
 
     protected function tenantId(): ?int
     {
-        return auth()->user()?->currentTenant?->id;
+        return filament()->getTenant()?->id;
     }
 
     protected function getData(): array
@@ -186,7 +186,7 @@ class MonthlyTrendChart extends ChartWidget
 
     protected function tenantId(): ?int
     {
-        return auth()->user()?->currentTenant?->id;
+        return filament()->getTenant()?->id;
     }
 
     protected function getData(): array
@@ -254,7 +254,7 @@ class RecentInvoicesTable extends TableWidget
 
     protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $tenantId = auth()->user()?->currentTenant?->id;
+        $tenantId = filament()->getTenant()?->id;
 
         return Invoice::query()
             ->with('company')
@@ -286,7 +286,7 @@ class LowStockTable extends TableWidget
 
     protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $tenantId = auth()->user()?->currentTenant?->id;
+        $tenantId = filament()->getTenant()?->id;
 
         return Product::query()
             ->where('type', 'product')
