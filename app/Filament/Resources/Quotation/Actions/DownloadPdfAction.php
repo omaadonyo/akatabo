@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Quotation\Actions;
 
+use App\Helpers\QrCodeHelper;
 use App\Models\Quotation;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Actions\Action;
@@ -16,11 +17,15 @@ class DownloadPdfAction extends Action
             ->color('gray')
             ->action(function (Quotation $record) {
                 $record->load(['items', 'company']);
+                $qrPath = QrCodeHelper::generatePngFile($record->public_url);
                 $pdf = Pdf::loadView('pdf.quotation', [
                     'quotation' => $record,
+                    'qrPath' => $qrPath,
                 ]);
-                return response()->streamDownload(function () use ($pdf) {
-                    echo $pdf->output();
+                $output = $pdf->output();
+                if (file_exists($qrPath)) { unlink($qrPath); }
+                return response()->streamDownload(function () use ($output) {
+                    echo $output;
                 }, "quotation-{$record->number}.pdf");
             });
     }

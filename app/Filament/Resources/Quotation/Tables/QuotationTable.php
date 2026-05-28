@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Quotation\Tables;
 
 use App\Filament\Resources\Invoice\InvoiceResource;
 use App\Filament\Resources\Quotation\Actions\DownloadPdfAction;
+use App\Helpers\QrCodeHelper;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use Filament\Actions\Action;
@@ -144,6 +145,7 @@ class QuotationTable
                             'quotation' => $record,
                             'company' => $record?->company,
                             'items' => $record?->items ?? collect(),
+                            'qrSvg' => QrCodeHelper::generateSvg($record->public_url),
                         ]))
                         ->modalWidth('3xl'),
                     DeleteAction::make(),

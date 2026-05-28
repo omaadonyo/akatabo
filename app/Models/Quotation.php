@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Mail\QuotationMail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Mail;
 
 class Quotation extends Model
 {
@@ -35,6 +37,18 @@ class Quotation extends Model
         ];
     }
 
+    protected static function booted()
+    {
+        static::saved(function ($quotation) {
+            if ($quotation->isDirty('status') && $quotation->status === 'accepted') {
+                $company = $quotation->company;
+                if ($company && $company->email) {
+                    Mail::to($company->email)->send(new QuotationMail($quotation));
+                }
+            }
+        });
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
@@ -48,5 +62,10 @@ class Quotation extends Model
     public function items()
     {
         return $this->hasMany(QuotationItem::class);
+    }
+
+    public function getPublicUrlAttribute(): string
+    {
+        return route('public.quotation.show', $this->id);
     }
 }
