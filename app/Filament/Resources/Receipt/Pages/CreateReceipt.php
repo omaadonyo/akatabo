@@ -16,6 +16,7 @@ class CreateReceipt extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['user_id'] = auth()->id();
+        $data['company_id'] = auth()->user()?->currentTenant?->id;
 
         if (blank($data['number'] ?? null)) {
             $lastReceipt = Receipt::withTrashed()

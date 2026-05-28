@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Invoice\Schemas;
 
-use App\Models\Company;
 use App\Models\Customer;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
@@ -24,8 +23,10 @@ class InvoiceForm
         return $schema
             ->components([
 
-                Hidden::make('company_name'),
-                Hidden::make('company_address'),
+                Hidden::make('company_name')
+                    ->default(fn () => auth()->user()?->currentTenant?->name),
+                Hidden::make('company_address')
+                    ->default(fn () => auth()->user()?->currentTenant?->address),
                 Hidden::make('customer_name'),
                 Hidden::make('customer_address'),
                 Hidden::make('customer_email'),
@@ -45,29 +46,9 @@ class InvoiceForm
 
                                     Grid::make(2)->schema([
 
-                                        Select::make('company_id')
-                                            ->label('Company')
-                                            ->options(fn () => auth()->user()?->companies()->pluck('name', 'id') ?? [])
-                                            ->searchable()
-                                            ->preload()
-                                            ->required()
-                                            ->reactive()
-                                            ->default(fn () => auth()->user()?->currentTenant?->id)
-                                            ->afterStateUpdated(function ($state, $set) {
-                                                $company = Company::find($state);
-                                                if ($company) {
-                                                    $set('company_name', $company->name);
-                                                    $set('company_address', $company->address);
-                                                }
-                                                $set('customer_id', null);
-                                                $set('customer_name', '');
-                                                $set('customer_address', '');
-                                                $set('customer_email', '');
-                                            }),
-
                                         Select::make('customer_id')
                                             ->label('Customer')
-                                            ->options(fn ($get) => Customer::where('company_id', $get('company_id') ?? auth()->user()?->currentTenant?->id)->pluck('name', 'id'))
+                                            ->options(fn () => Customer::where('company_id', auth()->user()?->currentTenant?->id)->pluck('name', 'id'))
                                             ->searchable()
                                             ->preload()
                                             ->reactive()
