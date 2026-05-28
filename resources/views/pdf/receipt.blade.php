@@ -34,9 +34,6 @@
     .badge-cancelled { background: #9ca3af; }
     .paid-stamp { text-align: center; margin: 20px 0; }
     .paid-stamp span { display: inline-block; padding: 8px 30px; border: 3px solid #d97706; color: #d97706; font-size: 18pt; font-weight: bold; letter-spacing: 4px; border-radius: 5px; }
-    .qr-section { text-align: center; margin: 30px 0; }
-    .qr-section svg { width: 100px; height: 100px; }
-    .qr-section p { font-size: 7pt; color: #9ca3af; margin: 5px 0 0; }
     .notes { margin-top: 30px; padding: 15px; background: #f9fafb; border-radius: 5px; font-size: 9pt; color: #555; }
     .notes h4 { margin: 0 0 5px 0; color: #374151; }
 </style>

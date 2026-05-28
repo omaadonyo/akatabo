@@ -35,9 +35,6 @@
     .badge-sent { background: #d97706; }
     .badge-overdue { background: #dc2626; }
     .badge-cancelled { background: #9ca3af; }
-    .qr-section { text-align: center; margin: 30px 0; }
-    .qr-section svg { width: 100px; height: 100px; }
-    .qr-section p { font-size: 7pt; color: #9ca3af; margin: 5px 0 0; }
     .notes { margin-top: 30px; padding: 15px; background: #f9fafb; border-radius: 5px; font-size: 9pt; color: #555; }
     .notes h4 { margin: 0 0 5px 0; color: #374151; }
     .payment-info { margin-top: 20px; padding: 15px; background: #fffbeb; border-radius: 5px; border: 1px solid #fde68a; }
