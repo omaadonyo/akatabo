@@ -17,16 +17,18 @@ class CreateQuotation extends CreateRecord
     {
         $data['user_id'] = auth()->id();
 
-        $lastQuotation = Quotation::withTrashed()
-            ->where('number', 'like', 'QOT-' . date('Y') . '-%')
-            ->orderBy('number', 'desc')
-            ->first();
+        if (blank($data['number'] ?? null)) {
+            $lastQuotation = Quotation::withTrashed()
+                ->where('number', 'like', 'QOT-' . date('Y') . '-%')
+                ->orderBy('number', 'desc')
+                ->first();
 
-        if ($lastQuotation) {
-            $lastNumber = (int) substr($lastQuotation->number, -4);
-            $data['number'] = 'QOT-' . date('Y') . '-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $data['number'] = 'QOT-' . date('Y') . '-0001';
+            if ($lastQuotation) {
+                $lastNumber = (int) substr($lastQuotation->number, -4);
+                $data['number'] = 'QOT-' . date('Y') . '-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+            } else {
+                $data['number'] = 'QOT-' . date('Y') . '-0001';
+            }
         }
 
         return $data;

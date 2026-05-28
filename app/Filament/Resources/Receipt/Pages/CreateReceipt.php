@@ -17,16 +17,18 @@ class CreateReceipt extends CreateRecord
     {
         $data['user_id'] = auth()->id();
 
-        $lastReceipt = Receipt::withTrashed()
-            ->where('number', 'like', 'RCT-' . date('Y') . '-%')
-            ->orderBy('number', 'desc')
-            ->first();
+        if (blank($data['number'] ?? null)) {
+            $lastReceipt = Receipt::withTrashed()
+                ->where('number', 'like', 'RCT-' . date('Y') . '-%')
+                ->orderBy('number', 'desc')
+                ->first();
 
-        if ($lastReceipt) {
-            $lastNumber = (int) substr($lastReceipt->number, -4);
-            $data['number'] = 'RCT-' . date('Y') . '-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $data['number'] = 'RCT-' . date('Y') . '-0001';
+            if ($lastReceipt) {
+                $lastNumber = (int) substr($lastReceipt->number, -4);
+                $data['number'] = 'RCT-' . date('Y') . '-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+            } else {
+                $data['number'] = 'RCT-' . date('Y') . '-0001';
+            }
         }
 
         return $data;

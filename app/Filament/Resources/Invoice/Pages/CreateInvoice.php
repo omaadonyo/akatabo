@@ -17,16 +17,18 @@ class CreateInvoice extends CreateRecord
     {
         $data['user_id'] = auth()->id();
 
-        $lastInvoice = Invoice::withTrashed()
-            ->where('number', 'like', 'INV-' . date('Y') . '-%')
-            ->orderBy('number', 'desc')
-            ->first();
+        if (blank($data['number'] ?? null)) {
+            $lastInvoice = Invoice::withTrashed()
+                ->where('number', 'like', 'INV-' . date('Y') . '-%')
+                ->orderBy('number', 'desc')
+                ->first();
 
-        if ($lastInvoice) {
-            $lastNumber = (int) substr($lastInvoice->number, -4);
-            $data['number'] = 'INV-' . date('Y') . '-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $data['number'] = 'INV-' . date('Y') . '-0001';
+            if ($lastInvoice) {
+                $lastNumber = (int) substr($lastInvoice->number, -4);
+                $data['number'] = 'INV-' . date('Y') . '-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+            } else {
+                $data['number'] = 'INV-' . date('Y') . '-0001';
+            }
         }
 
         return $data;

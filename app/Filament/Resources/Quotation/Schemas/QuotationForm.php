@@ -58,8 +58,7 @@ class QuotationForm
 
                                         TextInput::make('number')
                                             ->label('Quotation Number')
-                                            ->required()
-                                            ->unique(ignoreRecord: true)
+                                            ->placeholder('Auto-generated if left empty')
                                             ->disabled(fn ($operation) => $operation === 'edit'),
 
                                         DatePicker::make('date')
