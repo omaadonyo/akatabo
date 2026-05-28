@@ -59,12 +59,12 @@ class ProductResource extends Resource
     public static function getGlobalSearchResultTitle(Model $record): string | HtmlString
     {
         $name = $record->name;
-        $imageUrl = $record->image_url;
 
-        if ($imageUrl) {
+        if ($record->image) {
+            $url = asset('storage/' . $record->image);
             return new HtmlString(
                 '<span style="display:inline-flex;align-items:center;gap:8px;">' .
-                '<img src="' . e($imageUrl) . '" style="width:22px;height:22px;border-radius:4px;object-fit:cover;flex-shrink:0;" alt="">' .
+                '<img src="' . e($url) . '" style="width:22px;height:22px;border-radius:4px;object-fit:cover;flex-shrink:0;" alt="">' .
                 '<span>' . e($name) . '</span>' .
                 '</span>'
             );
