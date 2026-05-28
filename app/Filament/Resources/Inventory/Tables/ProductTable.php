@@ -22,7 +22,7 @@ class ProductTable
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\ImageColumn::make('image_url')
+                \Filament\Tables\Columns\ImageColumn::make('image')
                     ->label('Image')
                     ->width(48)
                     ->height(48)
