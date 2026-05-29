@@ -14,10 +14,36 @@ class Customer extends Model
         'name',
         'address',
         'email',
+        'deposit_balance',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'deposit_balance' => 'decimal:2',
+        ];
+    }
 
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function deposits()
+    {
+        return $this->hasMany(CustomerDeposit::class);
+    }
+
+    public function getOutstandingBalanceAttribute()
+    {
+        return $this->invoices()
+            ->whereNotIn('status', ['draft', 'cancelled', 'paid'])
+            ->get()
+            ->sum(fn ($inv) => $inv->balance);
     }
 }

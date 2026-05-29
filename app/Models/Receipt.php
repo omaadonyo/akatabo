@@ -12,6 +12,7 @@ class Receipt extends Model
 
     protected $fillable = [
         'invoice_id',
+        'project_id',
         'company_id',
         'customer_id',
         'user_id',
@@ -79,6 +80,11 @@ class Receipt extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
     }
 
     public function company()

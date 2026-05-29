@@ -12,6 +12,7 @@ class Product extends Model
 
     protected $fillable = [
         'company_id',
+        'fabric_roll_id',
         'name',
         'sku',
         'type',
@@ -19,6 +20,7 @@ class Product extends Model
         'image',
         'unit',
         'unit_price',
+        'buying_price',
         'currency',
         'stock_quantity',
         'low_stock_threshold',
@@ -29,6 +31,7 @@ class Product extends Model
     {
         return [
             'unit_price' => 'decimal:2',
+            'buying_price' => 'decimal:2',
             'stock_quantity' => 'decimal:2',
             'low_stock_threshold' => 'decimal:2',
             'is_active' => 'boolean',
@@ -43,6 +46,11 @@ class Product extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function fabricRoll()
+    {
+        return $this->belongsTo(FabricRoll::class);
     }
 
     public function isService(): bool

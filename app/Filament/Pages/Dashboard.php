@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Quotation;
 use App\Filament\Widgets\CompanyStatsOverview;
+use App\Filament\Widgets\LowFabricStockWidget;
 use BackedEnum;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Widgets\StatsOverviewWidget;
@@ -28,6 +29,7 @@ class Dashboard extends BaseDashboard
             MonthlyTrendChart::class,
             RecentInvoicesTable::class,
             LowStockTable::class,
+            LowFabricStockWidget::class,
         ];
     }
 

@@ -58,4 +58,14 @@ class Company extends Model
     {
         return $this->hasMany(Customer::class);
     }
+
+    public function fabricRolls()
+    {
+        return $this->hasMany(\App\Models\FabricRoll::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

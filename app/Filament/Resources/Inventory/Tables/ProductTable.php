@@ -101,7 +101,8 @@ class ProductTable
                 ActionGroup::make([
                     EditAction::make(),
                     ViewAction::make()->slideOver(),
-                    DeleteAction::make(),
+                    DeleteAction::make()
+                        ->visible(fn () => auth()->user()?->isAdmin() ?? false),
                 ]),
             ])
             ->toolbarActions([

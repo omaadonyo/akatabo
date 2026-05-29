@@ -14,6 +14,7 @@ class Quotation extends Model
     protected $fillable = [
         'company_id',
         'customer_id',
+        'project_id',
         'user_id',
         'number',
         'date',
@@ -48,6 +49,11 @@ class Quotation extends Model
                 }
             }
         });
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
     }
 
     public function company()

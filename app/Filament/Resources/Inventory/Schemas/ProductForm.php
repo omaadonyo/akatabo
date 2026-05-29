@@ -97,11 +97,18 @@ Section::make('Pricing & Units')
                     ->maxLength(50),
 
                 TextInput::make('unit_price')
-                    ->label('Unit Price')
+                    ->label('Selling Price')
                     ->numeric()
                     ->required()
                     ->default(0)
                     ->prefix('UGX'),
+
+                TextInput::make('buying_price')
+                    ->label('Buying Price')
+                    ->numeric()
+                    ->default(0)
+                    ->prefix('UGX')
+                    ->helperText('Used for profit protection validation.'),
 
             ]),
 

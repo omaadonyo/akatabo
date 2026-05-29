@@ -28,6 +28,12 @@ class CustomerTable
                     ->searchable()
                     ->sortable(),
 
+                TextColumn::make('deposit_balance')
+                    ->label('Deposit')
+                    ->money('USD')
+                    ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('address')
                     ->label('Address')
                     ->searchable()

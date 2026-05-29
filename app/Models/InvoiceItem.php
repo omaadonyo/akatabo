@@ -9,6 +9,7 @@ class InvoiceItem extends Model
     protected $fillable = [
         'invoice_id',
         'product_id',
+        'fabric_roll_id',
         'description',
         'unit',
         'quantity',
@@ -33,5 +34,10 @@ class InvoiceItem extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function fabricRoll()
+    {
+        return $this->belongsTo(FabricRoll::class);
     }
 }

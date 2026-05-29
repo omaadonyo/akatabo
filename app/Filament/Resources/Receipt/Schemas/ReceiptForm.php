@@ -20,221 +20,219 @@ class ReceiptForm
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(2)
             ->components([
 
-                Hidden::make('company_name')
-                    ->default(fn () => filament()->getTenant()?->name),
-                Hidden::make('company_address')
-                    ->default(fn () => filament()->getTenant()?->address),
-                Hidden::make('customer_name'),
-                Hidden::make('customer_address'),
-                Hidden::make('customer_email'),
-                Hidden::make('subtotal'),
-                Hidden::make('tax_amount'),
-                Hidden::make('total'),
+                Group::make()
+                    ->schema([
 
-                Grid::make(12)->schema([
+                        Hidden::make('company_name')
+                            ->default(fn () => filament()->getTenant()?->name),
+                        Hidden::make('company_address')
+                            ->default(fn () => filament()->getTenant()?->address),
+                        Hidden::make('customer_name'),
+                        Hidden::make('customer_address'),
+                        Hidden::make('customer_email'),
+                        Hidden::make('subtotal'),
+                        Hidden::make('tax_amount'),
+                        Hidden::make('total'),
 
-                    Group::make()
-                        ->columnSpan(7)
-                        ->schema([
+                        Section::make('Details')
+                            ->schema([
 
-                            Section::make('Details')
-                                ->schema([
+                                Grid::make(2)->schema([
 
-                                    Grid::make(2)->schema([
+                                    Select::make('customer_id')
+                                        ->label('Customer')
+                                        ->relationship('customer', 'name', fn ($query) => $query->where('company_id', filament()->getTenant()?->id))
+                                        ->searchable()
+                                        ->preload()
+                                        ->reactive()
+                                        ->afterStateUpdated(function ($state, $set) {
+                                            $customer = Customer::find($state);
+                                            if ($customer) {
+                                                $set('customer_name', $customer->name);
+                                                $set('customer_address', $customer->address);
+                                                $set('customer_email', $customer->email);
+                                            }
+                                        }),
 
-                                        Select::make('customer_id')
-                                            ->label('Customer')
-                                            ->relationship('customer', 'name', fn ($query) => $query->where('company_id', filament()->getTenant()?->id))
-                                            ->searchable()
-                                            ->preload()
-                                            ->reactive()
-                                            ->afterStateUpdated(function ($state, $set) {
-                                                $customer = Customer::find($state);
-                                                if ($customer) {
-                                                    $set('customer_name', $customer->name);
-                                                    $set('customer_address', $customer->address);
-                                                    $set('customer_email', $customer->email);
-                                                }
-                                            }),
+                                    TextInput::make('number')
+                                        ->label('Receipt Number')
+                                        ->placeholder('Auto-generated if left empty')
+                                        ->disabled(fn ($operation) => $operation === 'edit'),
 
-                                        TextInput::make('number')
-                                            ->label('Receipt Number')
-                                            ->placeholder('Auto-generated if left empty')
-                                            ->disabled(fn ($operation) => $operation === 'edit'),
+                                    DatePicker::make('date')
+                                        ->label('Date')
+                                        ->required()
+                                        ->default(now()),
 
-                                        DatePicker::make('date')
-                                            ->label('Date')
-                                            ->required()
-                                            ->default(now()),
+                                    Select::make('status')
+                                        ->label('Status')
+                                        ->options([
+                                            'issued' => 'Issued',
+                                            'cancelled' => 'Cancelled',
+                                        ])
+                                        ->default('issued')
+                                        ->required(),
 
-                                        Select::make('status')
-                                            ->label('Status')
-                                            ->options([
-                                                'issued' => 'Issued',
-                                                'cancelled' => 'Cancelled',
-                                            ])
-                                            ->default('issued')
-                                            ->required(),
-
-                                    ]),
+                                    Select::make('project_id')
+                                        ->label('Project')
+                                        ->relationship('project', 'name', fn ($query) => $query->where('company_id', filament()->getTenant()?->id))
+                                        ->searchable()
+                                        ->preload()
+                                        ->nullable(),
 
                                 ]),
 
-                            Section::make('Items')
-                                ->schema([
+                            ]),
 
-                                    Repeater::make('items')
-                                        ->relationship()
-                                        ->schema([
-                                            Grid::make(12)->schema([
+                        Section::make('Items')
+                            ->schema([
 
-                                                Select::make('product_id')
-                                                    ->label('Product')
-                                                    ->searchable()
-                                                    ->preload()
-                                                    ->columnSpan(5)
-                                                    ->relationship('product', 'name')
-                                                    ->reactive()
-                                                    ->afterStateUpdated(function ($state, $set, $get) {
-                                                        if (!$state) return;
-                                                        $product = \App\Models\Product::find($state);
-                                                        if ($product) {
-                                                            $set('description', $product->name);
-                                                            $set('unit', $product->unit);
-                                                            $set('unit_price', $product->unit_price);
-                                                            $qty = (float) ($get('quantity') ?? 1);
-                                                            $price = (float) ($product->unit_price ?? 0);
-                                                            $set('amount', number_format($qty * $price, 2, '.', ''));
-                                                        }
-                                                    }),
+                                Repeater::make('items')
+                                    ->relationship()
+                                    ->schema([
+                                        Grid::make(12)->schema([
 
-                                                TextInput::make('description')
-                                                    ->label('Description')
-                                                    ->columnSpan(7)
-                                                    ->required(),
+                                            Select::make('product_id')
+                                                ->label('Product')
+                                                ->searchable()
+                                                ->preload()
+                                                ->columnSpan(5)
+                                                ->relationship('product', 'name')
+                                                ->reactive()
+                                                ->afterStateUpdated(function ($state, $set, $get) {
+                                                    if (!$state) return;
+                                                    $product = \App\Models\Product::find($state);
+                                                    if ($product) {
+                                                        $set('description', $product->name);
+                                                        $set('unit', $product->unit);
+                                                        $set('unit_price', $product->unit_price);
+                                                        $set('quantity', 1);
+                                                        $price = (float) ($product->unit_price ?? 0);
+                                                        $set('amount', number_format($price, 2, '.', ''));
+                                                        static::updateTotals($set, $get);
+                                                    }
+                                                }),
 
-                                                TextInput::make('quantity')
-                                                    ->label('Qty')
-                                                    ->numeric()
-                                                    ->default(1)
-                                                    ->reactive()
-                                                    ->columnSpan(3)
-                                                    ->afterStateUpdated(function ($state, $set, $get) {
-                                                        $qty = (float) ($state ?? 0);
-                                                        $price = (float) ($get('unit_price') ?? 0);
-                                                        $set('amount', number_format($qty * $price, 2, '.', ''));
-                                                    }),
+                                            TextInput::make('description')
+                                                ->label('Description')
+                                                ->columnSpan(7)
+                                                ->required(),
 
-                                                TextInput::make('unit')
-                                                    ->label('Unit')
-                                                    ->columnSpan(2)
-                                                    ->placeholder('m, pcs...'),
+                                            TextInput::make('quantity')
+                                                ->label('Qty')
+                                                ->numeric()
+                                                ->default(1)
+                                                ->reactive()
+                                                ->columnSpan(2)
+                                                ->afterStateUpdated(function ($state, $set, $get) {
+                                                    $qty = (float) ($state ?? 0);
+                                                    $price = (float) ($get('unit_price') ?? 0);
+                                                    $set('amount', number_format($qty * $price, 2, '.', ''));
+                                                }),
 
-                                                TextInput::make('unit_price')
-                                                    ->label('Price')
-                                                    ->numeric()
-                                                    ->prefix('$')
-                                                    ->default(0)
-                                                    ->reactive()
-                                                    ->columnSpan(3)
-                                                    ->afterStateUpdated(function ($state, $set, $get) {
-                                                        $qty = (float) ($get('quantity') ?? 0);
-                                                        $price = (float) ($state ?? 0);
-                                                        $set('amount', number_format($qty * $price, 2, '.', ''));
-                                                    }),
+                                            TextInput::make('unit')
+                                                ->label('Unit')
+                                                ->columnSpan(2)
+                                                ->placeholder('m, pcs...'),
 
-                                                TextInput::make('amount')
-                                                    ->label('Amount')
-                                                    ->numeric()
-                                                    ->prefix('$')
-                                                    ->disabled()
-                                                    ->columnSpan(4),
+                                            TextInput::make('unit_price')
+                                                ->label('Price')
+                                                ->numeric()
+                                                ->prefix('$')
+                                                ->default(0)
+                                                ->reactive()
+                                                ->columnSpan(3)
+                                                ->afterStateUpdated(function ($state, $set, $get) {
+                                                    $qty = (float) ($get('quantity') ?? 0);
+                                                    $price = (float) ($state ?? 0);
+                                                    $set('amount', number_format($qty * $price, 2, '.', ''));
+                                                }),
 
-                                            ]),
-                                        ])
-                                        ->addActionLabel('Add Item')
+                                            TextInput::make('amount')
+                                                ->label('Amount')
+                                                ->numeric()
+                                                ->prefix('$')
+                                                ->disabled()
+                                                ->columnSpan(5),
+
+                                        ]),
+                                    ])
+                                    ->addActionLabel('Add Item')
+                                    ->reactive()
+                                    ->afterStateUpdated(function ($state, $set, $get) {
+                                        static::updateTotals($set, $get);
+                                    })
+                                    ->collapsible()
+                                    ->defaultItems(1),
+
+                            ]),
+
+                        Section::make('Pricing')
+                            ->schema([
+
+                                Grid::make(3)->schema([
+
+                                    TextInput::make('discount')
+                                        ->label('Discount')
+                                        ->numeric()
+                                        ->prefix('$')
+                                        ->default(0)
                                         ->reactive()
                                         ->afterStateUpdated(function ($state, $set, $get) {
                                             static::updateTotals($set, $get);
-                                        })
-                                        ->collapsible()
-                                        ->defaultItems(1),
+                                        }),
+
+                                    TextInput::make('tax_rate')
+                                        ->label('Tax Rate (%)')
+                                        ->numeric()
+                                        ->default(0)
+                                        ->reactive()
+                                        ->step(0.01)
+                                        ->afterStateUpdated(function ($state, $set, $get) {
+                                            static::updateTotals($set, $get);
+                                        }),
 
                                 ]),
 
-                            Section::make('Pricing')
-                                ->schema([
+                            ]),
 
-                                    Grid::make(3)->schema([
+                        Section::make('Notes')
+                            ->schema([
 
-                                        TextInput::make('discount')
-                                            ->label('Discount')
-                                            ->numeric()
-                                            ->prefix('$')
-                                            ->default(0)
-                                            ->reactive()
-                                            ->afterStateUpdated(function ($state, $set, $get) {
-                                                static::updateTotals($set, $get);
-                                            }),
+                                Textarea::make('notes')
+                                    ->label('Notes')
+                                    ->autosize()
+                                    ->rows(3)
+                                    ->placeholder('Enter any additional notes...'),
 
-                                        TextInput::make('tax_rate')
-                                            ->label('Tax Rate (%)')
-                                            ->numeric()
-                                            ->default(0)
-                                            ->reactive()
-                                            ->step(0.01)
-                                            ->afterStateUpdated(function ($state, $set, $get) {
-                                                static::updateTotals($set, $get);
-                                            }),
+                            ]),
 
-                                    ]),
+                    ]),
 
-                                ]),
-
-                            Section::make('Notes')
-                                ->schema([
-
-                                    Textarea::make('notes')
-                                        ->label('Notes')
-                                        ->autosize()
-                                        ->rows(3)
-                                        ->placeholder('Enter any additional notes...'),
-
-                                ]),
-
-                        ]),
-
-                    Group::make()
-                        ->columnSpan(5)
-                        ->schema([
-
-                            View::make('filament.forms.receipt-preview'),
-
-                        ]),
-
-                ]),
+                View::make('filament.forms.receipt-preview'),
 
             ]);
     }
 
     public static function updateTotals($set, $get): void
     {
-        $items = $get('items') ?? [];
+        $items = $get('data.items', true) ?? [];
         $subtotal = 0;
 
         foreach ($items as $item) {
             $subtotal += (float) ($item['amount'] ?? 0);
         }
 
-        $taxRate = (float) ($get('tax_rate') ?? 0);
-        $discount = (float) ($get('discount') ?? 0);
+        $taxRate = (float) ($get('data.tax_rate', true) ?? 0);
+        $discount = (float) ($get('data.discount', true) ?? 0);
         $taxAmount = $subtotal * ($taxRate / 100);
         $total = $subtotal + $taxAmount - $discount;
 
-        $set('subtotal', number_format($subtotal, 2, '.', ''));
-        $set('tax_amount', number_format($taxAmount, 2, '.', ''));
-        $set('total', number_format(max(0, $total), 2, '.', ''));
+        $set('data.subtotal', number_format($subtotal, 2, '.', ''), true);
+        $set('data.tax_amount', number_format($taxAmount, 2, '.', ''), true);
+        $set('data.total', number_format(max(0, $total), 2, '.', ''), true);
     }
 }

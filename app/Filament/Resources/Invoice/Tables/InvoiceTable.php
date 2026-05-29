@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Invoice\Tables;
 
 use App\Filament\Actions\ExportCsvBulkAction;
 use App\Filament\Resources\Invoice\Actions\DownloadPdfAction;
+use App\Filament\Resources\Invoice\Actions\PayFromDepositAction;
 use App\Filament\Resources\Receipt\ReceiptResource;
 use App\Helpers\QrCodeHelper;
 use App\Mail\InvoiceBalanceMail;
@@ -120,6 +121,7 @@ class InvoiceTable
             ])
             ->recordActions([
                 ActionGroup::make([
+                    PayFromDepositAction::make(),
                     Action::make('recordPayment')
                         ->label('Record Payment')
                         ->icon('heroicon-o-currency-dollar')
@@ -330,6 +332,9 @@ class InvoiceTable
                         ->modalWidth('3xl'),
                     DeleteAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                PayFromDepositAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

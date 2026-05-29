@@ -16,7 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser, HasTenants
 {
@@ -50,5 +50,15 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->role === 'employee';
     }
 }

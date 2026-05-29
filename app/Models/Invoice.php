@@ -11,6 +11,7 @@ class Invoice extends Model
 
     protected $fillable = [
         'quotation_id',
+        'project_id',
         'company_id',
         'customer_id',
         'user_id',
@@ -62,13 +63,22 @@ class Invoice extends Model
                 $shouldRestore = in_array($current, $restoreStatuses) && in_array($original, $deductStatuses);
 
                 if ($shouldDeduct || $shouldRestore) {
-                    $invoice->load('items.product');
+                    $invoice->load('items.product', 'items.fabricRoll');
                     foreach ($invoice->items as $item) {
                         if ($item->product && !$item->product->isService() && $item->product->stock_quantity !== null) {
                             if ($shouldDeduct) {
                                 $item->product->decrement('stock_quantity', $item->quantity);
                             } else {
                                 $item->product->increment('stock_quantity', $item->quantity);
+                            }
+                        }
+                        if ($item->fabricRoll) {
+                            if ($shouldDeduct) {
+                                $item->fabricRoll->decrement('remaining_meters', $item->quantity);
+                                $item->fabricRoll->updateStatus();
+                            } else {
+                                $item->fabricRoll->increment('remaining_meters', $item->quantity);
+                                $item->fabricRoll->updateStatus();
                             }
                         }
                     }
@@ -80,6 +90,11 @@ class Invoice extends Model
     public function quotation()
     {
         return $this->belongsTo(Quotation::class);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
     }
 
     public function company()
