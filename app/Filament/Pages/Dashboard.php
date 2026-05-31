@@ -66,11 +66,11 @@ class DashboardStatsOverview extends StatsOverviewWidget
 
         return [
             Stat::make('Invoices', $invoiceCount)
-                ->description($totalInvoiced > 0 ? '$' . number_format($totalInvoiced, 2) . ' total' : 'No invoices')
+                ->description($totalInvoiced > 0 ? 'UGX ' . number_format($totalInvoiced, 2) . ' total' : 'No invoices')
                 ->icon('heroicon-o-document-text')
                 ->color('primary'),
-            Stat::make('Outstanding', '$' . number_format(max(0, $outstanding), 2))
-                ->description('$' . number_format($totalPaid, 2) . ' collected')
+            Stat::make('Outstanding', 'UGX ' . number_format(max(0, $outstanding), 2))
+                ->description('UGX ' . number_format($totalPaid, 2) . ' collected')
                 ->icon('heroicon-o-currency-dollar')
                 ->color($outstanding > 0 ? 'warning' : 'success'),
             Stat::make('Companies', $companyCount)
@@ -270,7 +270,7 @@ class RecentInvoicesTable extends TableWidget
         return [
             \Filament\Tables\Columns\TextColumn::make('number'),
             \Filament\Tables\Columns\TextColumn::make('customer.name'),
-            \Filament\Tables\Columns\TextColumn::make('total')->money('USD'),
+            \Filament\Tables\Columns\TextColumn::make('total')->money('UGX'),
             \Filament\Tables\Columns\TextColumn::make('status')->badge()
                 ->color(fn (string $state): string => match ($state) {
                     'draft' => 'gray', 'sent' => 'warning', 'paid' => 'success',

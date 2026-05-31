@@ -56,7 +56,7 @@ class ProjectForm
                             TextInput::make('budget')
                                 ->label('Budget')
                                 ->numeric()
-                                ->prefix('$')
+                                ->prefix('UGX')
                                 ->default(0),
 
                         ]),

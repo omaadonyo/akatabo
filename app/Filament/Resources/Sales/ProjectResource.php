@@ -26,9 +26,27 @@ class ProjectResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Sales';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getNavigationBadge(): ?string
+    {
+        $tenantId = filament()->getTenant()?->id;
+        if (!$tenantId) return null;
+        return (string) static::getModel()::where('company_id', $tenantId)
+            ->whereIn('status', ['active', 'on_hold'])->count();
+    }
+
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'info';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
 
     public static function form(Schema $schema): Schema
     {

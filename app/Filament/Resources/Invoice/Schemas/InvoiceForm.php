@@ -150,7 +150,7 @@ class InvoiceForm
                                         TextInput::make('unit_price')
                                             ->label('Price')
                                             ->numeric()
-                                            ->prefix('$')
+                                            ->prefix('UGX')
                                             ->default(0)
                                             ->reactive()
                                             ->columnSpan(3)
@@ -163,7 +163,7 @@ class InvoiceForm
                                         TextInput::make('amount')
                                             ->label('Amount')
                                             ->numeric()
-                                            ->prefix('$')
+                                            ->prefix('UGX')
                                             ->disabled()
                                             ->columnSpan(5),
 
@@ -186,7 +186,7 @@ class InvoiceForm
                                 TextInput::make('discount')
                                     ->label('Discount')
                                     ->numeric()
-                                    ->prefix('$')
+                                    ->prefix('UGX')
                                     ->default(0)
                                     ->reactive()
                                     ->afterStateUpdated(function ($state, $set, $get) {

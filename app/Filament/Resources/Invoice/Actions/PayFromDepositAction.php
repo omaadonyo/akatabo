@@ -20,14 +20,14 @@ class PayFromDepositAction extends Action
             ->color('success')
             ->visible(fn ($record) => ($record->balance ?? 0) > 0 && ($record->customer?->deposit_balance ?? 0) > 0)
             ->modalHeading('Pay from Deposit')
-            ->modalDescription(fn ($record) => 'Customer deposit balance: $' . number_format($record->customer?->deposit_balance ?? 0, 2))
+            ->modalDescription(fn ($record) => 'Customer deposit balance: UGX ' . number_format($record->customer?->deposit_balance ?? 0, 2))
             ->form(function ($record) {
                 $maxAmount = min($record->balance ?? 0, $record->customer?->deposit_balance ?? 0);
                 return [
                     TextInput::make('amount')
                         ->label('Payment Amount')
                         ->numeric()
-                        ->prefix('$')
+                        ->prefix('UGX')
                         ->required()
                         ->default($maxAmount)
                         ->extraAttributes([
@@ -44,7 +44,7 @@ class PayFromDepositAction extends Action
                 if ($amount <= 0 || $amount > $maxAmount) {
                     Notification::make()
                         ->title('Invalid amount')
-                        ->body("Amount must be between \$0.01 and \$" . number_format($maxAmount, 2))
+                        ->body("Amount must be between 0.01 and UGX " . number_format($maxAmount, 2))
                         ->danger()
                         ->send();
                     return;
@@ -140,7 +140,7 @@ class PayFromDepositAction extends Action
 
                 Notification::make()
                     ->title('Payment recorded')
-                    ->body('$' . number_format($amount, 2) . ' paid from deposit. Receipt ' . $receipt->number . ' created.')
+                    ->body('UGX ' . number_format($amount, 2) . ' paid from deposit. Receipt ' . $receipt->number . ' created.')
                     ->success()
                     ->send();
             });

@@ -25,6 +25,20 @@ class CustomerResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Sales';
 
+    protected static ?int $navigationSort = 1;
+
+    public static function getNavigationBadge(): ?string
+    {
+        $tenantId = filament()->getTenant()?->id;
+        if (!$tenantId) return null;
+        return (string) static::getModel()::where('company_id', $tenantId)->count();
+    }
+
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'gray';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return CustomerForm::configure($schema);

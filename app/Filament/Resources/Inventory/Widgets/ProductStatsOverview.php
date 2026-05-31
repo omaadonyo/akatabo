@@ -43,7 +43,7 @@ class ProductStatsOverview extends StatsOverviewWidget
                 ->description($lowStockCount > 0 ? 'Products below threshold' : 'All products well stocked')
                 ->icon('heroicon-o-exclamation-triangle')
                 ->color($lowStockCount > 0 ? 'danger' : 'success'),
-            Stat::make('Inventory Value', '$' . number_format($productValue, 2))
+            Stat::make('Inventory Value', 'UGX ' . number_format($productValue, 2))
                 ->description('Total stock at unit price')
                 ->icon('heroicon-o-currency-dollar')
                 ->color('success'),

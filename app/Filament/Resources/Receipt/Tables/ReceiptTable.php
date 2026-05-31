@@ -51,7 +51,7 @@ class ReceiptTable
 
                 TextColumn::make('total')
                     ->label('Total')
-                    ->money('USD')
+                    ->money('UGX')
                     ->sortable(),
 
                 TextColumn::make('status')

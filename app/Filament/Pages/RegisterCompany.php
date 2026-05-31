@@ -17,6 +17,11 @@ class RegisterCompany extends RegisterTenant
         return 'Create Company';
     }
 
+    public static function canView(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
+
     protected function handleRegistration(array $data): Company
     {
         $data['user_id'] = auth()->id();

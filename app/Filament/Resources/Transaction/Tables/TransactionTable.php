@@ -45,7 +45,7 @@ class TransactionTable
 
                 TextColumn::make('amount')
                     ->label('Amount')
-                    ->money('USD')
+                    ->money('UGX')
                     ->sortable(),
 
                 TextColumn::make('status')

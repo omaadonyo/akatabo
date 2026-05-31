@@ -21,7 +21,24 @@ class CustomerDepositResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Sales';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 7;
+
+    public static function getNavigationBadge(): ?string
+    {
+        $tenantId = filament()->getTenant()?->id;
+        if (!$tenantId) return null;
+        return (string) static::getModel()::where('company_id', $tenantId)->count();
+    }
+
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'warning';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -37,7 +54,7 @@ class CustomerDepositResource extends Resource
                     ->label('Amount')
                     ->numeric()
                     ->required()
-                    ->prefix('$'),
+                    ->prefix('UGX'),
                 \Filament\Forms\Components\Select::make('type')
                     ->label('Type')
                     ->options([
@@ -66,7 +83,7 @@ class CustomerDepositResource extends Resource
                     ->sortable(),
                 TextColumn::make('amount')
                     ->label('Amount')
-                    ->money('USD')
+                    ->money('UGX')
                     ->sortable(),
                 TextColumn::make('type')
                     ->label('Type')

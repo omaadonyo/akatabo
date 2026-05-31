@@ -62,18 +62,18 @@ class InvoiceTable
 
                 TextColumn::make('total')
                     ->label('Total')
-                    ->money('USD')
+                    ->money('UGX')
                     ->sortable(),
 
                 TextColumn::make('paid_amount')
                     ->label('Paid')
-                    ->money('USD')
+                    ->money('UGX')
                     ->sortable()
                     ->color('success'),
 
                 TextColumn::make('balance')
                     ->label('Balance')
-                    ->money('USD')
+                    ->money('UGX')
                     ->color(fn ($record) => ($record->balance ?? 0) > 0 ? 'warning' : 'gray'),
 
                 TextColumn::make('status')
@@ -130,7 +130,7 @@ class InvoiceTable
                             TextInput::make('amount')
                                 ->label('Payment Amount')
                                 ->numeric()
-                                ->prefix('$')
+                                ->prefix('UGX')
                                 ->required()
                                 ->default(fn ($record) => $record->balance)
                                 ->extraAttributes(function ($record) {
@@ -147,7 +147,7 @@ class InvoiceTable
                             if ($amount <= 0 || $amount > $balance) {
                                 Notification::make()
                                     ->title('Invalid amount')
-                                    ->body("Amount must be between $0.01 and $" . number_format($balance, 2))
+                                    ->body("Amount must be between 0.01 and UGX " . number_format($balance, 2))
                                     ->danger()
                                     ->send();
                                 return;
@@ -232,7 +232,7 @@ class InvoiceTable
 
                             Notification::make()
                                 ->title('Payment recorded')
-                                ->body('Receipt ' . $receipt->number . ' for $' . number_format($amount, 2) . ' created.')
+                                ->body('Receipt ' . $receipt->number . ' for UGX ' . number_format($amount, 2) . ' created.')
                                 ->success()
                                 ->send();
                         }),

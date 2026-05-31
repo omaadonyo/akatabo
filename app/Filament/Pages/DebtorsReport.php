@@ -23,9 +23,32 @@ class DebtorsReport extends Page implements HasTable
 
     protected static string | UnitEnum | null $navigationGroup = 'Sales';
 
+    protected static ?int $navigationSort = 6;
+
     protected static ?string $title = 'Debtors Report';
 
     protected string $view = 'filament.pages.debtors-report';
+
+    public static function getNavigationBadge(): ?string
+    {
+        $tenantId = filament()->getTenant()?->id;
+        if (!$tenantId) return null;
+        return (string) Customer::where('company_id', $tenantId)
+            ->whereHas('invoices', fn ($q) => $q
+                ->whereNotIn('status', ['draft', 'cancelled', 'paid'])
+                ->whereColumn('total', '>', 'paid_amount'))
+            ->count();
+    }
+
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'danger';
+    }
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
 
     public ?array $filters = [];
 
@@ -54,7 +77,7 @@ class DebtorsReport extends Page implements HasTable
                 ->searchable(),
             TextColumn::make('outstanding_balance')
                 ->label('Total Outstanding')
-                ->money('USD'),
+                ->money('UGX'),
             TextColumn::make('oldest_invoice_date')
                 ->label('Oldest Invoice')
                 ->date()

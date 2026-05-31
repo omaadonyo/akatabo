@@ -68,7 +68,7 @@ class FabricRollTable
 
                 TextColumn::make('selling_price_per_meter')
                     ->label('Selling Price')
-                    ->money('USD')
+                    ->money('UGX')
                     ->sortable(),
 
                 TextColumn::make('status')

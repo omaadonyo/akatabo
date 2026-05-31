@@ -52,7 +52,7 @@ class ProductTable
 
                 TextColumn::make('unit_price')
                     ->label('Price')
-                    ->money('USD')
+                    ->money('UGX')
                     ->sortable(),
 
                 TextColumn::make('stock_quantity')

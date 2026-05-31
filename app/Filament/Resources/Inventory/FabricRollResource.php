@@ -31,6 +31,11 @@ class FabricRollResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'roll_code';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return FabricRollForm::configure($schema);

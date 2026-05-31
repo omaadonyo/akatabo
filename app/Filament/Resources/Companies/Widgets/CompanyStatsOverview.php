@@ -31,11 +31,11 @@ class CompanyStatsOverview extends StatsOverviewWidget
                 ->icon('heroicon-o-building-library')
                 ->color('primary'),
             Stat::make('With Invoices', $companiesWithInvoices)
-                ->description('$' . number_format($totalInvoiced, 2) . ' invoiced')
+                ->description('UGX ' . number_format($totalInvoiced, 2) . ' invoiced')
                 ->icon('heroicon-o-document-text')
                 ->color('info'),
             Stat::make('With Receipts', $companiesWithReceipts)
-                ->description('$' . number_format($totalCollected, 2) . ' collected')
+                ->description('UGX ' . number_format($totalCollected, 2) . ' collected')
                 ->icon('heroicon-o-receipt-percent')
                 ->color('success'),
             Stat::make('With Quotations', $companiesWithQuotations)

@@ -38,7 +38,7 @@ class ProjectTable
                     ->sortable(),
 
                 TextColumn::make('budget')
-                    ->money('USD')
+                    ->money('UGX')
                     ->sortable(),
 
                 TextColumn::make('created_at')

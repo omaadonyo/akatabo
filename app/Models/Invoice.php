@@ -49,6 +49,46 @@ class Invoice extends Model
         return max(0, ($this->total ?? 0) - ($this->paid_amount ?? 0));
     }
 
+    public function deductStockAndRecordUsage(): void
+    {
+        $this->load('items.product.fabricRoll', 'customer', 'company');
+        foreach ($this->items as $item) {
+            if ($item->product && !$item->product->isService() && $item->product->stock_quantity !== null) {
+                $item->product->decrement('stock_quantity', $item->quantity);
+            }
+            $fabricRoll = $item->product?->fabricRoll;
+            if ($fabricRoll) {
+                FabricRollUsage::create([
+                    'fabric_roll_id' => $fabricRoll->id,
+                    'company_id' => $this->company_id,
+                    'customer_id' => $this->customer_id,
+                    'invoice_id' => $this->id,
+                    'meters_used' => $item->quantity,
+                    'remaining_before' => $fabricRoll->remaining_meters,
+                    'remaining_after' => max(0, $fabricRoll->remaining_meters - $item->quantity),
+                    'date' => $this->date ?? now(),
+                    'notes' => 'Invoice ' . $this->number,
+                ]);
+            }
+        }
+    }
+
+    public function restoreStockAndUsage(): void
+    {
+        $this->load('items.product.fabricRoll');
+        foreach ($this->items as $item) {
+            if ($item->product && !$item->product->isService() && $item->product->stock_quantity !== null) {
+                $item->product->increment('stock_quantity', $item->quantity);
+            }
+            $fabricRoll = $item->product?->fabricRoll;
+            if ($fabricRoll) {
+                $fabricRoll->usages()
+                    ->where('invoice_id', $this->id)
+                    ->delete();
+            }
+        }
+    }
+
     protected static function booted()
     {
         static::saved(function ($invoice) {
@@ -63,24 +103,10 @@ class Invoice extends Model
                 $shouldRestore = in_array($current, $restoreStatuses) && in_array($original, $deductStatuses);
 
                 if ($shouldDeduct || $shouldRestore) {
-                    $invoice->load('items.product', 'items.fabricRoll');
-                    foreach ($invoice->items as $item) {
-                        if ($item->product && !$item->product->isService() && $item->product->stock_quantity !== null) {
-                            if ($shouldDeduct) {
-                                $item->product->decrement('stock_quantity', $item->quantity);
-                            } else {
-                                $item->product->increment('stock_quantity', $item->quantity);
-                            }
-                        }
-                        if ($item->fabricRoll) {
-                            if ($shouldDeduct) {
-                                $item->fabricRoll->decrement('remaining_meters', $item->quantity);
-                                $item->fabricRoll->updateStatus();
-                            } else {
-                                $item->fabricRoll->increment('remaining_meters', $item->quantity);
-                                $item->fabricRoll->updateStatus();
-                            }
-                        }
+                    if ($shouldDeduct) {
+                        $invoice->deductStockAndRecordUsage();
+                    } else {
+                        $invoice->restoreStockAndUsage();
                     }
                 }
             }

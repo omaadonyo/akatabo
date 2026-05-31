@@ -34,21 +34,21 @@ class InvoiceStatsOverview extends StatsOverviewWidget
         $totalCount = (clone $baseQuery)->whereNotIn('status', ['cancelled'])->count();
 
         return [
-            Stat::make('Total Revenue', '$' . number_format($totalAll, 2))
+            Stat::make('Total Revenue', 'UGX ' . number_format($totalAll, 2))
                 ->description($paidCount . ' paid, ' . $sentCount . ' sent')
                 ->icon('heroicon-o-currency-dollar')
                 ->color('success'),
-            Stat::make('Outstanding', '$' . number_format(max(0, $outstanding), 2))
-                ->description('$' . number_format($totalPaid, 2) . ' collected')
+            Stat::make('Outstanding', 'UGX ' . number_format(max(0, $outstanding), 2))
+                ->description('UGX ' . number_format($totalPaid, 2) . ' collected')
                 ->icon('heroicon-o-clock')
                 ->color($outstanding > 0 ? 'warning' : 'success'),
             Stat::make('Overdue', $overdueCount)
                 ->description((clone $baseQuery)->where('status', 'overdue')->sum('total') > 0
-                    ? '$' . number_format((clone $baseQuery)->where('status', 'overdue')->sum('total'), 2) . ' total'
+                    ? 'UGX ' . number_format((clone $baseQuery)->where('status', 'overdue')->sum('total'), 2) . ' total'
                     : 'No overdue invoices')
                 ->icon('heroicon-o-exclamation-triangle')
                 ->color($overdueCount > 0 ? 'danger' : 'gray'),
-            Stat::make('Average Invoice', '$' . number_format(
+            Stat::make('Average Invoice', 'UGX ' . number_format(
                 $totalAll > 0 ? $totalAll / max(1, $totalCount) : 0, 2))
                 ->description('Per invoice')
                 ->icon('heroicon-o-chart-bar')

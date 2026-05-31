@@ -30,6 +30,11 @@ class FabricRollUsageResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'id';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
+
     public static function table(Table $table): Table
     {
         return $table

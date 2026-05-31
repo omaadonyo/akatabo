@@ -36,11 +36,11 @@ class CompanyStatsOverview extends StatsOverviewWidget
                 ->description($activeCompanies . ' active, ' . $inactiveCompanies . ' inactive')
                 ->icon('heroicon-o-building-library')
                 ->color('primary'),
-            Stat::make('Invoiced', '$' . number_format($totalInvoiced, 2))
-                ->description('$' . number_format($totalCollected, 2) . ' collected')
+            Stat::make('Invoiced', 'UGX ' . number_format($totalInvoiced, 2))
+                ->description('UGX ' . number_format($totalCollected, 2) . ' collected')
                 ->icon('heroicon-o-document-text')
                 ->color('info'),
-            Stat::make('Collected', '$' . number_format($totalCollected, 2))
+            Stat::make('Collected', 'UGX ' . number_format($totalCollected, 2))
                 ->description(number_format($totalInvoiced > 0 ? ($totalCollected / $totalInvoiced) * 100 : 0, 1) . '% collection rate')
                 ->icon('heroicon-o-receipt-percent')
                 ->color('success'),

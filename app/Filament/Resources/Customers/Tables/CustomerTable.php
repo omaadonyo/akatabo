@@ -30,7 +30,7 @@ class CustomerTable
 
                 TextColumn::make('deposit_balance')
                     ->label('Deposit')
-                    ->money('USD')
+                    ->money('UGX')
                     ->sortable()
                     ->toggleable(),
 

@@ -27,6 +27,11 @@ class ProductResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ProductForm::configure($schema);
@@ -78,7 +83,7 @@ class ProductResource extends Resource
         return array_filter([
             'SKU' => $record->sku,
             'Type' => ucfirst($record->type),
-            'Price' => $record->unit_price ? '$' . number_format($record->unit_price, 2) : null,
+            'Price' => $record->unit_price ? 'UGX ' . number_format($record->unit_price, 2) : null,
             'Stock' => $record->isService() ? '—' : number_format($record->stock_quantity, 0),
         ]);
     }

@@ -19,7 +19,26 @@ class TransactionResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Sales';
 
+    protected static ?int $navigationSort = 8;
+
     protected static ?string $recordTitleAttribute = 'document_number';
+
+    public static function getNavigationBadge(): ?string
+    {
+        $tenantId = filament()->getTenant()?->id;
+        if (!$tenantId) return null;
+        return (string) static::getModel()::where('company_id', $tenantId)->count();
+    }
+
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'gray';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
 
     public static function table(Table $table): Table
     {

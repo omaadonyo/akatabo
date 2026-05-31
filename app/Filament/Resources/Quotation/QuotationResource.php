@@ -27,7 +27,22 @@ class QuotationResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Sales';
 
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $recordTitleAttribute = 'number';
+
+    public static function getNavigationBadge(): ?string
+    {
+        $tenantId = filament()->getTenant()?->id;
+        if (!$tenantId) return null;
+        return (string) static::getModel()::where('company_id', $tenantId)
+            ->whereIn('status', ['draft', 'sent'])->count();
+    }
+
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'warning';
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -72,7 +87,7 @@ class QuotationResource extends Resource
         return [
             'Client' => $record->customer?->name ?? $record->company?->name ?? '—',
             'Date' => $record->date?->format('M d, Y') ?? '—',
-            'Total' => '$' . number_format($record->total, 2),
+            'Total' => 'UGX ' . number_format($record->total, 2),
         ];
     }
 }

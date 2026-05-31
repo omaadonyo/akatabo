@@ -93,14 +93,14 @@ class FabricRollForm
                                 ->label('Buying Price / Meter')
                                 ->numeric()
                                 ->required()
-                                ->prefix('$')
+                                ->prefix('UGX')
                                 ->step(0.01),
 
                             TextInput::make('selling_price_per_meter')
                                 ->label('Selling Price / Meter')
                                 ->numeric()
                                 ->required()
-                                ->prefix('$')
+                                ->prefix('UGX')
                                 ->step(0.01),
 
                             TextInput::make('remaining_meters')
