@@ -19,7 +19,6 @@
             --border: #e2e8f0;
             --bg-header: rgba(255,255,255,0.8);
             --nav-border: #e2e8f0;
-            --overlay: rgba(15,23,42,0.3);
             --input-bg: #f1f5f9;
             --input-border: #e2e8f0;
             --input-text: #0f172a;
@@ -30,7 +29,7 @@
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg-page: #0f172a; --bg-card: #1e293b; --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b; --border: #334155;
-                --bg-header: rgba(15,23,42,0.7); --nav-border: rgba(255,255,255,0.06); --overlay: rgba(0,0,0,0.5);
+                --bg-header: rgba(15,23,42,0.7); --nav-border: rgba(255,255,255,0.06);
                 --input-bg: rgba(255,255,255,0.04); --input-border: rgba(255,255,255,0.08); --input-text: #f1f5f9; --label-color: #94a3b8;
                 --shadow: 0 1px 2px rgba(0,0,0,0.3); --stat-bg: rgba(30,41,59,0.8);
             }
@@ -63,7 +62,7 @@
         <span style="font-weight:700;font-size:15px;letter-spacing:-.02em">{{ config('app.name') }}</span>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
-        <button onclick="openModal()" style="padding:8px 24px;border-radius:8px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 3px 12px rgba(59,130,246,.25)">Sign In</button>
+        <a href="{{ route('filament.app.auth.login') }}" style="padding:8px 24px;border-radius:8px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 3px 12px rgba(59,130,246,.25);text-decoration:none;display:inline-block">Sign In</a>
     </div>
 </header>
 
@@ -79,7 +78,7 @@
             </div>
             <h1 style="font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:0 0 12px">Manage invoices,<br>quotations &amp; receipts</h1>
             <p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0 0 24px;max-width:400px">Track customers, inventory, fabric rolls, and payments in one place with real-time insights.</p>
-            <button onclick="openModal()" style="padding:12px 32px;border-radius:10px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 6px 24px rgba(59,130,246,.25)">Get Started &rarr;</button>
+            <a href="{{ route('filament.app.auth.login') }}" style="display:inline-block;padding:12px 32px;border-radius:10px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 6px 24px rgba(59,130,246,.25);text-decoration:none">Get Started &rarr;</a>
         </div>
 
         {{-- Stats grid --}}
@@ -131,66 +130,7 @@
     </div>
 </div>
 
-{{-- Blur overlay --}}
-<div id="overlay-bg" onclick="closeModal(event)" style="display:none;position:fixed;inset:0;z-index:10;backdrop-filter:blur(24px) saturate(.8);-webkit-backdrop-filter:blur(24px) saturate(.8);background:var(--overlay)"></div>
 
-{{-- LOGIN MODAL --}}
-<div id="login-modal" onclick="if(event.target===this)closeModal(event)" style="display:none;position:fixed;inset:0;z-index:20;align-items:center;justify-content:center;padding:24px">
-    <div style="width:100%;max-width:400px;background:var(--bg-card);border-radius:16px;border:1px solid var(--border);box-shadow:0 32px 64px rgba(0,0,0,.3);overflow:hidden;animation:slideUp .3s ease-out">
-        <style>@keyframes slideUp{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}</style>
-        <div style="padding:28px 28px 0;text-align:center">
-            <div style="width:48px;height:48px;margin:0 auto 12px;border-radius:12px;background:linear-gradient(135deg,#3b82f6,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#fff;box-shadow:0 6px 20px rgba(59,130,246,.2)">A</div>
-            <h2 style="font-size:20px;font-weight:700;margin:0 0 4px;color:var(--text-primary)">Welcome back</h2>
-            <p style="font-size:13px;color:var(--text-secondary);margin:0 0 24px">Sign in to your account</p>
-        </div>
-        <form method="POST" action="{{ route('filament.app.auth.login') }}" style="padding:0 28px 28px">
-            @csrf
-            <div style="margin-bottom:16px">
-                <label for="email" style="display:block;font-size:12px;font-weight:600;color:var(--label-color);margin-bottom:5px">Email</label>
-                <input type="email" name="login" id="email" required autocomplete="email" autofocus value="{{ old('login') }}"
-                    style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--input-text);font-size:14px;font-family:inherit;outline:none;transition:border-color .15s"
-                    onfocus="this.style.borderColor='rgba(59,130,246,.5)'" onblur="this.style.borderColor='var(--input-border)'">
-                @error('login')<div style="color:#f87171;font-size:11px;margin-top:3px">{{$message}}</div>@enderror
-            </div>
-            <div style="margin-bottom:20px">
-                <label for="password" style="display:block;font-size:12px;font-weight:600;color:var(--label-color);margin-bottom:5px">Password</label>
-                <input type="password" name="password" id="password" required autocomplete="current-password"
-                    style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--input-text);font-size:14px;font-family:inherit;outline:none;transition:border-color .15s"
-                    onfocus="this.style.borderColor='rgba(59,130,246,.5)'" onblur="this.style.borderColor='var(--input-border)'">
-                @error('password')<div style="color:#f87171;font-size:11px;margin-top:3px">{{$message}}</div>@enderror
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);cursor:pointer">
-                    <input type="checkbox" name="remember" style="width:14px;height:14px;accent-color:#3b82f6"> Remember me
-                </label>
-                @if(Route::has('filament.app.auth.password-reset.request'))
-                <a href="{{ route('filament.app.auth.password-reset.request') }}" style="font-size:12px;color:#3b82f6;text-decoration:none">Forgot password?</a>
-                @endif
-            </div>
-            <button type="submit" style="width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 3px 12px rgba(59,130,246,.2)">Sign In</button>
-            @if(Route::has('filament.app.auth.register'))
-            <p style="text-align:center;margin:16px 0 0;font-size:12px;color:var(--text-secondary)">Don't have an account? <a href="{{ route('filament.app.auth.register') }}" style="color:#3b82f6;text-decoration:none;font-weight:600">Register</a></p>
-            @endif
-        </form>
-    </div>
-</div>
-
-<script>
-function openModal(){
-    document.getElementById('login-modal').style.display='flex';
-    document.getElementById('overlay-bg').style.display='block';
-    document.body.style.overflow='hidden';
-}
-function closeModal(e){
-    if(e&&e.target!==e.currentTarget&&e.target.closest('#login-modal>div'))return;
-    document.getElementById('login-modal').style.display='none';
-    document.getElementById('overlay-bg').style.display='none';
-    document.body.style.overflow='';
-}
-@if($errors->any())
-document.addEventListener('DOMContentLoaded',function(){openModal()});
-@endif
-</script>
 
 </body>
 </html>
