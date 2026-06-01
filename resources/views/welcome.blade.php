@@ -35,14 +35,8 @@
                 --shadow: 0 1px 2px rgba(0,0,0,0.3); --stat-bg: rgba(30,41,59,0.8);
             }
         }
-        .theme-dark,:root.theme-dark {
-            --bg-page: #0f172a; --bg-card: #1e293b; --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b; --border: #334155;
-            --bg-header: rgba(15,23,42,0.7); --nav-border: rgba(255,255,255,0.06); --overlay: rgba(0,0,0,0.5);
-            --input-bg: rgba(255,255,255,0.04); --input-border: rgba(255,255,255,0.08); --input-text: #f1f5f9; --label-color: #94a3b8;
-            --shadow: 0 1px 2px rgba(0,0,0,0.3); --stat-bg: rgba(30,41,59,0.8);
-        }
         *,*:before,*:after{box-sizing:border-box}
-        body{margin:0;padding:0;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif;background:var(--bg-page);color:var(--text-primary);height:100vh;overflow:hidden;transition:background .2s,color .2s}
+        body{margin:0;padding:0;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif;background:var(--bg-page);color:var(--text-primary);height:100vh;overflow:hidden}
     </style>
 </head>
 <body>
@@ -56,7 +50,7 @@
     $customerCount = Customer::count();
 @endphp
 
-<script>(function(){const s=localStorage.getItem('theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('theme-dark')})();</script>
+
 
 <div style="position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0">
     <div style="position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 50%,rgba(59,130,246,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(168,85,247,0.04) 0%,transparent 50%);"></div>
@@ -69,7 +63,6 @@
         <span style="font-weight:700;font-size:15px;letter-spacing:-.02em">{{ config('app.name') }}</span>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
-        <button onclick="toggleTheme()" style="padding:6px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:15px;line-height:1;width:32px;height:32px;display:flex;align-items:center;justify-content:center" title="Toggle theme">&#9790;</button>
         <button onclick="openModal()" style="padding:8px 24px;border-radius:8px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 3px 12px rgba(59,130,246,.25)">Sign In</button>
     </div>
 </header>
@@ -183,10 +176,20 @@
 </div>
 
 <script>
-function toggleTheme(){const h=document.documentElement,h.classList.toggle('theme-dark'),localStorage.setItem('theme',h.classList.contains('theme-dark')?'dark':'light')}
-function openModal(){document.getElementById('login-modal').style.display='flex';document.getElementById('overlay-bg').style.display='block';document.body.style.overflow='hidden'}
-function closeModal(e){if(e&&e.target!==e.currentTarget&&e.target.closest('#login-modal>div'))return;document.getElementById('login-modal').style.display='none';document.getElementById('overlay-bg').style.display='none';document.body.style.overflow=''}
-@if($errors->any())document.addEventListener('DOMContentLoaded',function(){openModal()});@endif
+function openModal(){
+    document.getElementById('login-modal').style.display='flex';
+    document.getElementById('overlay-bg').style.display='block';
+    document.body.style.overflow='hidden';
+}
+function closeModal(e){
+    if(e&&e.target!==e.currentTarget&&e.target.closest('#login-modal>div'))return;
+    document.getElementById('login-modal').style.display='none';
+    document.getElementById('overlay-bg').style.display='none';
+    document.body.style.overflow='';
+}
+@if($errors->any())
+document.addEventListener('DOMContentLoaded',function(){openModal()});
+@endif
 </script>
 
 </body>
