@@ -1,17 +1,34 @@
 @echo off
 title Akatabo - Starting Services
+cd /d "%~dp0"
 echo.
 echo ============================================
 echo   Starting Akatabo Services
 echo ============================================
 echo.
 
+:: Run migrations if pending
+echo [1/5] Running pending migrations...
+"C:\xampp\php\php.exe" artisan migrate --force 2>&1 | findstr /v "Nothing to migrate"
+echo.
+
+:: Build Vite assets for production
+echo [2/5] Building frontend assets...
+call npm.cmd run build >nul 2>&1
+echo   Done.
+
+:: Cache everything for max speed
+echo [3/5] Caching routes, config, views, events...
+"C:\xampp\php\php.exe" artisan optimize >nul 2>&1
+"C:\xampp\php\php.exe" artisan filament:optimize >nul 2>&1
+echo   Done.
+
 :: Start XAMPP Apache & MySQL
-echo [1/3] Starting XAMPP (Apache + MySQL)...
+echo [4/5] Starting XAMPP (Apache + MySQL)...
 start /min "" "C:\xampp\xampp_start.exe"
 
 :: Wait for MySQL to be ready
-echo [2/3] Waiting for MySQL...
+echo [5/5] Waiting for MySQL...
 :wait_mysql
 "C:\xampp\mysql\bin\mysql.exe" -u root -e "SELECT 1" >nul 2>&1
 if errorlevel 1 (
@@ -21,7 +38,6 @@ if errorlevel 1 (
 echo   MySQL is ready.
 
 :: Start Laravel dev server
-echo [3/3] Starting Laravel dev server...
 echo.
 echo   App:       http://localhost:8000
 echo   Dashboard: http://localhost:8000/app
