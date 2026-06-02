@@ -11,27 +11,27 @@
     @endif
     <style>
         :root {
-            --bg-page: #f8fafc;
-            --bg-card: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
-            --border: #e2e8f0;
-            --bg-header: rgba(255,255,255,0.8);
-            --nav-border: #e2e8f0;
-            --input-bg: #f1f5f9;
-            --input-border: #e2e8f0;
-            --input-text: #0f172a;
-            --label-color: #475569;
-            --shadow: 0 1px 2px rgba(0,0,0,0.04);
+            --bg-page: #ffffff;
+            --bg-card: #fafafa;
+            --text-primary: #000000;
+            --text-secondary: #404040;
+            --text-muted: #a3a3a3;
+            --border: #e5e5e5;
+            --bg-header: rgba(255,255,255,0.85);
+            --nav-border: #e5e5e5;
+            --input-bg: #f5f5f5;
+            --input-border: #d4d4d4;
+            --input-text: #000000;
+            --label-color: #404040;
+            --shadow: 0 1px 2px rgba(0,0,0,0.06);
             --stat-bg: #ffffff;
         }
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-page: #0f172a; --bg-card: #1e293b; --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b; --border: #334155;
-                --bg-header: rgba(15,23,42,0.7); --nav-border: rgba(255,255,255,0.06);
-                --input-bg: rgba(255,255,255,0.04); --input-border: rgba(255,255,255,0.08); --input-text: #f1f5f9; --label-color: #94a3b8;
-                --shadow: 0 1px 2px rgba(0,0,0,0.3); --stat-bg: rgba(30,41,59,0.8);
+                --bg-page: #000000; --bg-card: #1a1a1a; --text-primary: #ffffff; --text-secondary: #a3a3a3; --text-muted: #525252; --border: #262626;
+                --bg-header: rgba(0,0,0,0.7); --nav-border: rgba(255,255,255,0.08);
+                --input-bg: rgba(255,255,255,0.04); --input-border: rgba(255,255,255,0.1); --input-text: #ffffff; --label-color: #a3a3a3;
+                --shadow: 0 1px 2px rgba(0,0,0,0.4); --stat-bg: rgba(26,26,26,0.8);
             }
         }
         *,*:before,*:after{box-sizing:border-box}
@@ -49,20 +49,17 @@
     $customerCount = Customer::count();
 @endphp
 
-
-
 <div style="position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0">
-    <div style="position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 50%,rgba(59,130,246,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(168,85,247,0.04) 0%,transparent 50%);"></div>
     <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)"></div>
 </div>
 
 <header style="position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;border-bottom:1px solid var(--nav-border);backdrop-filter:blur(12px);background:var(--bg-header);flex-shrink:0">
     <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff">A</div>
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--text-primary);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:var(--bg-page)">A</div>
         <span style="font-weight:700;font-size:15px;letter-spacing:-.02em">{{ config('app.name') }}</span>
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
-        <a href="{{ route('filament.app.auth.login') }}" style="padding:8px 24px;border-radius:8px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 3px 12px rgba(59,130,246,.25);text-decoration:none;display:inline-block">Sign In</a>
+    <div>
+        <a href="{{ route('filament.app.auth.login') }}" style="padding:8px 24px;border-radius:8px;border:1px solid var(--text-primary);background:var(--text-primary);color:var(--bg-page);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .15s" onmouseenter="this.style.opacity='.8'" onmouseleave="this.style.opacity='1'">Sign In</a>
     </div>
 </header>
 
@@ -72,31 +69,31 @@
 
         {{-- Hero --}}
         <div style="flex:0 0 auto;max-width:440px">
-            <div style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:100px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.15);font-size:12px;color:#3b82f6;margin-bottom:20px">
-                <span style="width:5px;height:5px;border-radius:50%;background:#22c55e;display:inline-block"></span>
+            <div style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:100px;background:var(--bg-card);border:1px solid var(--border);font-size:12px;color:var(--text-secondary);margin-bottom:20px">
+                <span style="width:5px;height:5px;border-radius:50%;background:var(--text-muted);display:inline-block"></span>
                 Multi-tenant platform
             </div>
-            <h1 style="font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:0 0 12px">Manage invoices,<br>quotations &amp; receipts</h1>
+            <h1 style="font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:0 0 12px;color:var(--text-primary)">Manage invoices,<br>quotations &amp; receipts</h1>
             <p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0 0 24px;max-width:400px">Track customers, inventory, fabric rolls, and payments in one place with real-time insights.</p>
-            <a href="{{ route('filament.app.auth.login') }}" style="display:inline-block;padding:12px 32px;border-radius:10px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 6px 24px rgba(59,130,246,.25);text-decoration:none">Get Started &rarr;</a>
+            <a href="{{ route('filament.app.auth.login') }}" style="display:inline-block;padding:12px 32px;border-radius:10px;border:1px solid var(--text-primary);background:var(--text-primary);color:var(--bg-page);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;text-decoration:none;transition:opacity .15s" onmouseenter="this.style.opacity='.8'" onmouseleave="this.style.opacity='1'">Get Started &rarr;</a>
         </div>
 
         {{-- Stats grid --}}
         <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:0">
             @php
                 $stats = [
-                    ['label'=>'Total Invoiced','value'=>'UGX '.number_format($totalInvoiced,0),'icon'=>'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z','color'=>'#3b82f6'],
-                    ['label'=>'Pending Invoices','value'=>$pendingInvoices,'icon'=>'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z','color'=>'#f59e0b'],
-                    ['label'=>'Receipts Issued','value'=>$receiptCount,'icon'=>'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z','color'=>'#10b981'],
-                    ['label'=>'Active Quotations','value'=>$activeQuotations,'icon'=>'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z','color'=>'#a855f7'],
-                    ['label'=>'Customers','value'=>$customerCount,'icon'=>'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z','color'=>'#06b6d4'],
+                    ['label'=>'Total Invoiced','value'=>'UGX '.number_format($totalInvoiced,0),'icon'=>'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
+                    ['label'=>'Pending Invoices','value'=>$pendingInvoices,'icon'=>'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
+                    ['label'=>'Receipts Issued','value'=>$receiptCount,'icon'=>'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'],
+                    ['label'=>'Active Quotations','value'=>$activeQuotations,'icon'=>'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
+                    ['label'=>'Customers','value'=>$customerCount,'icon'=>'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'],
                 ];
             @endphp
             @foreach($stats as $s)
             <div style="background:var(--stat-bg);border-radius:12px;padding:18px 20px;border:1px solid var(--border);box-shadow:var(--shadow)">
                 <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-                    <div style="width:32px;height:32px;border-radius:8px;background:{{$s['color']}}12;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                        <svg style="width:16px;height:16px;color:{{$s['color']}}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="{{$s['icon']}}"/></svg>
+                    <div style="width:32px;height:32px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                        <svg style="width:16px;height:16px;color:var(--text-secondary)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="{{$s['icon']}}"/></svg>
                     </div>
                     <span style="font-size:12px;font-weight:500;color:var(--text-secondary);line-height:1.2">{{$s['label']}}</span>
                 </div>
@@ -110,16 +107,16 @@
     <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);background:var(--bg-card);flex-shrink:0">
         @php
             $features = [
-                ['svg'=>'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z','label'=>'Quotations','color'=>'#a855f7'],
-                ['svg'=>'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z','label'=>'Invoices','color'=>'#3b82f6'],
-                ['svg'=>'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z','label'=>'Receipts','color'=>'#10b981'],
-                ['svg'=>'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4','label'=>'Inventory','color'=>'#f59e0b'],
+                ['svg'=>'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z','label'=>'Quotations'],
+                ['svg'=>'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z','label'=>'Invoices'],
+                ['svg'=>'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z','label'=>'Receipts'],
+                ['svg'=>'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4','label'=>'Inventory'],
             ];
         @endphp
         @foreach($features as $f)
-        <div style="padding:16px 24px;display:flex;align-items:center;gap:12px;border-right:1px solid var(--border);&:last-child{border-right:none}">
-            <div style="width:36px;height:36px;border-radius:10px;background:{{$f['color']}}12;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <svg style="width:18px;height:18px;color:{{$f['color']}}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="{{$f['svg']}}"/></svg>
+        <div style="padding:16px 24px;display:flex;align-items:center;gap:12px;border-right:1px solid var(--border)">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--bg-page);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg style="width:18px;height:18px;color:var(--text-secondary)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="{{$f['svg']}}"/></svg>
             </div>
             <div>
                 <div style="font-weight:600;font-size:13px;color:var(--text-primary)">{{$f['label']}}</div>
@@ -129,8 +126,6 @@
         @endforeach
     </div>
 </div>
-
-
 
 </body>
 </html>
